@@ -7,6 +7,7 @@ import {
   Route,
   Server,
   Sparkle,
+  PenLine,
 } from "lucide-react";
 import { Book, ComponentIcon } from "lucide-react";
 
@@ -26,6 +27,11 @@ export const linkItems: LinkItemType[] = [
     url: "/download",
     text: "Download",
     icon: <Sparkle />,
+  },
+  {
+    url: "/blog",
+    text: "Blog",
+    icon: <PenLine />,
   },
   {
     url: "/changelog",

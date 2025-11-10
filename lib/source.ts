@@ -2,7 +2,7 @@ import type { InferMetaType, InferPageType } from "fumadocs-core/source";
 import { loader } from "fumadocs-core/source";
 import { icons } from "lucide-react";
 import { createElement } from "react";
-import { docs, releases, roadmap, privacy, terms } from "@/.source";
+import { docs, releases, roadmap, privacy, terms, blog } from "@/.source";
 
 // Loader for docs
 export const docsSource = loader({
@@ -47,6 +47,12 @@ export const termsSource = loader({
   source: terms.toFumadocsSource(),
 });
 
+// Loader for blog
+export const blogSource = loader({
+  baseUrl: "/blog",
+  source: blog.toFumadocsSource(),
+});
+
 export type DocsPage = InferPageType<typeof docsSource>;
 export type DocsMeta = InferMetaType<typeof docsSource>;
 
@@ -61,3 +67,6 @@ export type PrivacyMeta = InferMetaType<typeof privacySource>;
 
 export type TermsPage = InferPageType<typeof termsSource>;
 export type TermsMeta = InferMetaType<typeof termsSource>;
+
+export type BlogPage = InferPageType<typeof blogSource>;
+export type BlogMeta = InferMetaType<typeof blogSource>;

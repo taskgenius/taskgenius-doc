@@ -71,6 +71,19 @@ export const terms = defineDocs({
   },
 });
 
+export const blog = defineDocs({
+  dir: "content/blog",
+  docs: {
+    schema: frontmatterSchema.extend({
+      title: z.string(),
+      date: z.string(),
+      author: z.string(),
+      description: z.string(),
+      tags: z.array(z.string()).default([]),
+    }),
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     // MDX options

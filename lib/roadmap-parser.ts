@@ -94,7 +94,7 @@ function parseTaskLine(line: string, lineNumber: number): Partial<RoadmapTask> |
     remainingContent = remainingContent.slice(linkMatch[0].length).trim();
   } else {
     // 没有链接，提取普通文本（到第一个 [ 或行尾）
-    const textMatch = remainingContent.match(/^([^\[]+)/);
+    const textMatch = remainingContent.match(/^([^[]+)/);
     if (textMatch) {
       title = textMatch[1].trim();
       remainingContent = remainingContent.slice(textMatch[0].length).trim();
