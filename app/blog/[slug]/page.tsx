@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import { blogSource } from "@/lib/source";
 import { BlogDetail } from "@/components/blog/BlogDetail";
 import type { Metadata } from "next";
-import { Calendar, User } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 export const revalidate = 3600; // Revalidate every hour
 
