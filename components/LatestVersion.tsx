@@ -2,13 +2,13 @@ import Link from "next/link";
 import { fetchGitHubStats } from "@/lib/github";
 
 export default async function LatestVersion() {
-  const stats = await fetchGitHubStats("Quorafind", "Obsidian-Task-Genius");
+  const stats = await fetchGitHubStats("taskgenius", "taskgenius-plugin");
   const version = stats.latestVersion || "1.0.0";
 
   return (
     <>
       <Link
-        href={`https://github.com/Quorafind/Obsidian-Task-Genius/releases/tag/${
+        href={`https://github.com/taskgenius/taskgenius-plugin/releases/tag/${
           stats.latestVersion || "latest"
         }`}
         target="_blank"

@@ -14,7 +14,7 @@ import { Book, ComponentIcon } from "lucide-react";
 export const linkItems: LinkItemType[] = [
   {
     type: "icon",
-    url: "https://github.com/Quorafind/obsidian-task-genius",
+    url: "https://github.com/taskgenius/taskgenius-plugin",
     text: "Github",
     icon: (
       <svg role="img" viewBox="0 0 24 24" fill="currentColor">

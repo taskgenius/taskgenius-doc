@@ -127,7 +127,7 @@ export default function WaitlistPage() {
             </Link>{" "}
             or{" "}
             <Link
-              href="https://github.com/Quorafind/Obsidian-Task-Genius/discussions"
+              href="https://github.com/taskgenius/taskgenius-plugin/discussions"
               target="_blank"
               rel="noopener noreferrer"
               className="text-fd-primary hover:underline"

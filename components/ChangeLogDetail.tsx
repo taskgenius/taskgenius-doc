@@ -61,7 +61,7 @@ export function ChangeLogDetail({ page }: ChangeLogDetailProps) {
             <div className="mb-8 mt-2 text-xs text-fd-muted-foreground font-mono flex flex-row gap-2 items-center">
               <Badge variant={"default"}>{access}</Badge>
               <Link
-                href={`https://github.com/Quorafind/Obsidian-Task-Genius/releases/tag/${version}`}
+                href={`https://github.com/taskgenius/taskgenius-plugin/releases/tag/${version}`}
               >
                 <GithubIcon className="w-4 h-4" />
               </Link>

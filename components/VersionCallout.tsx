@@ -10,7 +10,7 @@ export const VersionCallout = ({ version }: { version: string }) => {
     >
       Available since{" "}
       <Link
-        href={`https://github.com/quorafind/Obsidian-Task-Genius/releases/tag/${version}`}
+        href={`https://github.com/taskgenius/taskgenius-plugin/releases/tag/${version}`}
         target="_blank"
       >
         <strong className="text-primary">{version}</strong>
