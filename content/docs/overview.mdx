@@ -1,0 +1,87 @@
+---
+title: Overview
+description: What Task Genius adds on top of plain-text tasks, and how it fits into an Obsidian workflow
+---
+
+Task Genius is a task and project management layer for Obsidian. It keeps everything in **plain-text Markdown**, while adding UI, metadata, and automation layers that stay *vault-native*.
+
+Task Genius is designed around two main usage scenarios: enhancing your **Editor** experience and providing powerful **Views** for project management.
+
+## 1. Editor Experience
+
+*Enhance your workflow directly within the Obsidian editor (Live Preview & Reading Mode).*
+
+### Progress Tracking
+
+Visualize completion and momentum without leaving your notes.
+
+- **Visual Progress Bars**: Automatically render progress bars for parent tasks, list items, and headings.
+- **Flexible Display**: Choose between graphical bars, text indicators, or both combined.
+- **Customizable Formats**: Select from percentage, fraction, detailed counts, or define your own custom format with expressions.
+- **Smart Counting**: Configure sub-task counting, custom goals (`g::10`), and exclude specific statuses from calculations.
+- **Conditional Visibility**: Hide progress bars based on tags, folders, or frontmatter metadata.
+
+### Status Cycling
+
+Go beyond simple checkboxes with configurable status workflows.
+
+- **Click-to-Cycle**: Click checkboxes in the editor to cycle through custom statuses (e.g., `[ ]` → `[/]` → `[x]`).
+- **Multiple Cycles**: Define different cycling patterns (Simple, GTD, Kanban) for various project types.
+- **Visual Styles**: Choose from default checkboxes, custom text marks, or Task Genius icons.
+- **Parent Automation**: Automatically mark parent tasks as "In Progress" or "Completed" based on subtask status.
+
+### Workflow Automation
+
+Streamline task lifecycle with built-in automation.
+
+- **Auto Timestamps**: Automatically add timestamps when tasks are created or status changes.
+- **Time Tracking**: Calculate and record time spent on each workflow stage.
+- **Stage Management**: Define multi-stage workflows with automatic transitions.
+- **Date Management**: Auto-append completion, start, or cancelled dates when status changes.
+
+## 2. Task Genius Views
+
+*Gain perspective with aggregated views and quick management tools.*
+
+### Multi-View Dashboard
+
+Cluster and visualize tasks from across your entire vault.
+
+- **View Modes**: Switch between List, Kanban, Tree, Calendar, Gantt, and more to see your data your way.
+- **Project Clustering**: Group tasks by file, folder, tag, or project to visualize your workload.
+- **Advanced Filtering**: Focus on what matters with real-time filters based on status, dates, priorities, and metadata.
+- **Saved Filters**: Store commonly used filter configurations for quick access.
+
+### Quick Operations
+
+Manage tasks efficiently without jumping between files.
+
+- **Interactive Status**: Cycle task statuses directly from the view with a single click.
+- **Inline Editing**: Modify task details, dates, and metadata without opening the source file.
+- **Batch Actions**: Update multiple tasks at once from the unified dashboard.
+- **Source Navigation**: Jump directly to any task's location in its source file.
+
+## Design Principles
+
+### Plain Text First
+
+Tasks remain readable and portable. Task Genius works on top of standard Markdown:
+
+```markdown
+- [ ] Draft proposal
+- [/] Write first version
+- [x] Send to reviewer
+```
+
+### Vault-Wide Indexing (Built-in)
+
+Task Genius maintains a fast, incremental task index so views stay in sync as you edit files.
+
+If anything looks stale, you can rebuild from scratch with `Task Genius: Force reindex all tasks`.
+
+## Where to Go Next
+
+- Start with [Getting Started](/docs/getting-started)
+- Learn the basics of the [Task View](/docs/task-view)
+- Configure [Task Status & Cycling](/docs/task-status) and [Progress Bars](/docs/progress-bars)
+- Set up [Quick Capture](/docs/quick-capture) for fast input

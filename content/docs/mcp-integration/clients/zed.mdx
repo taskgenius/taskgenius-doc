@@ -1,0 +1,18 @@
+---
+title: Zed Configuration
+description: Connect Zed to Task Genius MCP
+---
+
+If Zed supports MCP servers in your version, configure Task Genius as an HTTP MCP server.
+
+## Configuration Values
+
+- **URL**: `http://127.0.0.1:7777/mcp`
+- **Header**: `Authorization: Bearer <TOKEN>+<APP_ID>`
+
+## Notes
+
+- Prefer local-only access (`127.0.0.1`)
+- Start with read-only tools (query/list) before enabling write operations
+
+If Zed's MCP configuration format differs, use [Custom Client Configuration](/docs/mcp-integration/clients/custom) as the canonical field mapping.

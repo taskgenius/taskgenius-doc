@@ -1,82 +1,94 @@
 ---
 title: Getting Started
+description: "A practical starting point - pick your user level, follow a short checklist, and reach a usable workflow quickly"
 ---
 
-Task Genius is a comprehensive plugin for Obsidian designed to enhance your task and project management workflow.
+import { CompassIcon, LayoutDashboardIcon, SettingsIcon, SparklesIcon, WrenchIcon } from "lucide-react";
 
-It integrates seamlessly into your notes, offering visual progress tracking, flexible status management, powerful filtering, and a dedicated view to manage tasks across your vault.
+Task Genius keeps tasks as **plain Markdown**, and adds a UI + metadata layer on top:
+
+- <LayoutDashboardIcon className="inline-block w-5 h-5" /> **Task View**: a dashboard for vault-wide task navigation with multiple view modes
+- <WrenchIcon className="inline-block w-5 h-5" /> **Editor enhancements**: status cycling, progress bars, and workflow automation in-place
+- <SparklesIcon className="inline-block w-5 h-5" /> **Automation**: filters, workspaces, date management, and quick capture
+
+If you land here and don't know what to do next: pick your user level and follow one \"track\".
+
+## <CompassIcon className="inline-block" /> Pick your track (3 user levels)
+
+<Cards>
+  <Card
+    title="Level 1 - First time"
+    href="/docs/start/first-time"
+    description="Install -> open the Task View -> create tasks -> configure only essentials."
+  />
+  <Card
+    title="Level 2 - Already using"
+    href="/docs/start/already-using"
+    description="Tune views, workspaces, statuses, filters, and UI behavior to match how you work."
+  />
+  <Card
+    title="Level 3 - Task-management playbook"
+    href="/docs/start/task-management"
+    description="A complete system: capture -> triage -> plan -> execute -> review."
+  />
+</Cards>
+
+## <SettingsIcon className="inline-block" /> Quick access (do-first links)
+
+<DeepLinkButton href="obsidian://task-genius/settings">
+  Open Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+<Cards>
+  <Card
+    title="Task View"
+    href="/docs/task-view"
+    description="Understand the dashboard UI and views (Inbox/Today/Upcoming/...)."
+  />
+  <Card
+    title="UI Layer (Fluent)"
+    href="/docs/task-view/ui-layer"
+    description="How FluentSidebar / FluentTopNavigation / FluentTaskView coordinate UI and state."
+  />
+</Cards>
 
 ## Installation
 
 <Cards>
   <Card
-    title="Manual Installation"
-    href="/docs/installation/manual"
-    description="Learn how to install Task Genius manually."
-  />
-  <Card
     title="Community Installation"
     href="/docs/installation/community"
-    description="Learn how to install Task Genius from the community plugins list."
+    description="Install from Obsidian Community plugins."
+  />
+  <Card
+    title="Manual Installation"
+    href="/docs/installation/manual"
+    description="Install manually from a release/build."
   />
 </Cards>
 
-## Quick Access
-
-<DeepLinkButton href="obsidian://task-genius/settings">
-  Open Settings
-</DeepLinkButton>
-
-<DeepLinkFallback />
-
-## Explore Features
-
-Explore the key features to make the most out of Task Genius:
+## Explore features (when you're ready)
 
 <Cards>
   <Card
-    title="Progress Bars"
-    href="/docs/progress-bars"
-    description="Visual progress tracking for your tasks."
-  />
-  <Card
     title="Task Status & Cycling"
     href="/docs/task-status"
-    description="Flexible status management and cycling."
+    description="Configure status marks and cycle them with consistent rules."
   />
   <Card
-    title="Date & Priority Management"
-    href="/docs/date-priority"
-    description="Manage task deadlines and priorities."
+    title="View Modes"
+    href="/docs/view-modes"
+    description="List / Kanban / Tree / Calendar - same tasks, different perspectives."
   />
   <Card
-    title="In-Editor Task Filtering"
+    title="Filtering"
     href="/docs/filtering"
-    description="Filter tasks directly in your editor."
+    description="Focus by tag/project/status/date without changing your notes."
   />
   <Card
-    title="Task Mover"
-    href="/docs/task-mover"
-    description="Archive tasks with ease."
-  />
-  <Card
-    title="Quick Capture"
-    href="/docs/quick-capture"
-    description="Capture tasks quickly and easily."
-  />
-  <Card
-    title="Workflows"
-    href="/docs/workflows"
-    description="Automate your task management workflow."
-  />
-  <Card
-    title="Dedicated Task View"
-    href="/docs/task-view"
-    description="A dedicated view for managing tasks across your vault."
-  />
-  <Card
-    title="Bases Integration"
-    href="/docs/bases-support"
-    description="Use Task Genius views within Obsidian Bases for enhanced data visualization."
+    title="Progress Bars"
+    href="/docs/progress-bars"
+    description="Visual rollups for parent tasks, list items, and headings."
   />
 </Cards>

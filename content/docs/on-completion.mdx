@@ -1,0 +1,199 @@
+---
+title: On Completion Actions
+---
+
+import { VersionCallout } from "@/components/VersionCallout";
+
+Configure automatic actions that trigger when tasks are completed. Task Genius can archive completed tasks, move them to specific files, or perform other post-completion operations.
+
+<VersionCallout version="9.0.0" />
+
+## Overview
+
+On Completion provides automated task management:
+
+- **Archive completed tasks** to designated files
+- **Organize by date** with automatic section headers
+- **Maintain clean active lists** by moving finished items
+- **Track completion history** with timestamps and links
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=on-completion">
+  Open On Completion Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+## Core Settings
+
+### Enable On Completion
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enableOnCompletion` | boolean | `true` |
+
+Toggle to enable automatic actions when tasks are completed.
+
+### Default Archive File
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `defaultArchiveFile` | string | `"Archive/Completed Tasks.md"` |
+
+Specify the default file path for archived tasks.
+
+**Placeholders:**
+- `{{DATE:FORMAT}}` - Current date (e.g., `Archive/{{DATE:YYYY-MM}}.md`)
+- File is created automatically if it doesn't exist
+
+**Examples:**
+```
+Archive/Completed Tasks.md
+Archive/{{DATE:YYYY}}/{{DATE:MM}}.md
+Done/{{DATE:YYYY-MM-DD}}.md
+```
+
+### Default Archive Section
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `defaultArchiveSection` | string | `"Completed Tasks"` |
+
+Heading name where archived tasks are placed.
+
+**Behavior:**
+- If the heading exists, tasks are appended under it
+- If the heading doesn't exist, it's created
+- Set to empty string to append to end of file
+
+### Show Advanced Options
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `showAdvancedOptions` | boolean | `false` |
+
+Toggle to show advanced configuration options in the settings UI.
+
+## Archive Behavior
+
+### Automatic Archiving
+
+When a task is marked complete, Task Genius can:
+
+1. **Move the task** to the archive file
+2. **Add a timestamp** showing when it was completed
+3. **Add a source link** back to the original file
+4. **Organize by date** under section headers
+
+### Archive Format
+
+Archived tasks maintain their original format with added metadata:
+
+```markdown
+## Completed Tasks
+
+### 2025-01-15
+
+- [x] Submit quarterly report ✅ 2025-01-15 [[Daily/2025-01-15]]
+- [x] Review budget proposal ✅ 2025-01-15 [[Projects/Budget]]
+
+### 2025-01-14
+
+- [x] Team meeting notes ✅ 2025-01-14 [[Meetings/Team Sync]]
+```
+
+## Settings Reference
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `enableOnCompletion` | boolean | `true` | Enable on-completion functionality |
+| `defaultArchiveFile` | string | `"Archive/Completed Tasks.md"` | Default archive file path |
+| `defaultArchiveSection` | string | `"Completed Tasks"` | Section heading for archived tasks |
+| `showAdvancedOptions` | boolean | `false` | Show advanced configuration in UI |
+
+## Use Cases
+
+### Daily Review Workflow
+
+Archive completed tasks from daily notes:
+
+**Setup:**
+- Archive file: `Archive/{{DATE:YYYY-MM}}.md`
+- Archive section: `Completed`
+
+**Result:** Monthly archive files with all completed tasks
+
+### Project Completion Tracking
+
+Track completed project milestones:
+
+**Setup:**
+- Archive file: `Projects/Completed.md`
+- Archive section: Per-project headings
+
+**Result:** Centralized project completion history
+
+### GTD Weekly Review
+
+Clean up completed items during weekly review:
+
+**Setup:**
+- Archive file: `Archive/Weekly/{{DATE:YYYY-[W]WW}}.md`
+- Archive section: `Done This Week`
+
+**Result:** Weekly completion logs for review
+
+## Integration with Other Features
+
+### Task Mover
+
+On Completion works alongside [Task Mover](/docs/task-mover):
+
+- **On Completion:** Automatic archiving on task completion
+- **Task Mover:** Manual batch moving of tasks
+
+### Auto Date Manager
+
+Combine with [Auto Date Manager](/docs/append-date):
+
+- Completion dates added automatically
+- Archive preserves all date metadata
+
+### Workflows
+
+Works with [Workflows](/docs/workflows):
+
+- Terminal workflow stages trigger completion
+- Archived tasks include workflow history
+
+## Best Practices
+
+1. **Consistent Archive Structure:** Use date-based organization for easy retrieval
+2. **Source Links:** Keep source links enabled for task traceability
+3. **Regular Review:** Periodically review archive for patterns and insights
+4. **Separate Archives:** Consider separate archives for different task types
+
+## Troubleshooting
+
+### Tasks Not Archiving
+
+- Verify `enableOnCompletion` is enabled
+- Check archive file path is valid
+- Confirm the task was properly marked complete
+- Review file permissions
+
+### Archive File Not Created
+
+- Check folder path exists or can be created
+- Verify date placeholders are correct
+- Ensure no invalid characters in path
+
+### Missing Source Links
+
+- Verify source link option is enabled
+- Check original file path is accessible
+
+## Related Features
+
+- [Task Mover](/docs/task-mover): Manual task moving and archiving
+- [Auto Date Manager](/docs/append-date): Automatic date management
+- [Task Status](/docs/task-status): Configure completion markers
+- [Workflows](/docs/workflows): Multi-stage task management

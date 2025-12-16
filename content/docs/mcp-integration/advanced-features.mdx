@@ -1,0 +1,43 @@
+---
+title: Prompts & Resources
+description: Practical prompting patterns and MCP ergonomics
+---
+
+This page focuses on getting more reliable results from AI tools connected to Task Genius MCP.
+
+## Prompting Patterns
+
+### Prefer Explicit Filters
+
+Instead of “show important tasks”, specify what “important” means:
+
+- “Show incomplete tasks with priority >= 4 due today”
+- “List tasks tagged `#project/website` with no due date”
+
+### Ask for Structured Output
+
+When you need something actionable, request a stable format:
+
+- “Return a table with columns: task, file, due, priority”
+- “Return a JSON list of task ids to mark complete”
+
+### Two-Step Prompts (Safer Writes)
+
+For write operations, use a confirm step:
+
+1. “Query candidates and show me the ids”
+2. “Confirm: mark these ids as completed”
+
+## Tool Referencing
+
+Some clients let you reference tools directly (e.g., typing `#` in chat). Use that to force deterministic operations like querying or creating tasks instead of relying on free-form interpretation.
+
+For the authoritative tool list and parameters, use [API Reference](/docs/mcp-integration/api-reference).
+
+## Reusable Templates
+
+Save your best prompts as templates for:
+
+- Daily planning (“today + overdue + high priority”)
+- Weekly review (“completed this week + blocked + abandoned”)
+- Project status updates (“group by project, summarize next actions”)

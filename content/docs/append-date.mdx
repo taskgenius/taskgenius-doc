@@ -74,10 +74,64 @@ When you change a task status, the appropriate date metadata is automatically ma
 - [>] Task 1 [start:: 2025-01-15] => - [-] Task 1 [start:: 2025-01-15] [cancelled:: 2025-01-15]
 ```
 
-## Settings
+## Settings Reference
 
-You can configure the auto date manager in the Task Genius settings under "Auto Date Manager":
+Configure the auto date manager in the Task Genius settings under "Auto Date Manager":
 
-### Enable Auto Date Manager
+### Core Settings
 
-Toggle this setting to enable automatic date management when task status changes. When enabled, dates will be added or removed based on your preferred metadata format.
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `enabled` | boolean | `false` | Enable automatic date management |
+| `manageCompletedDate` | boolean | `true` | Manage completion dates |
+| `manageStartDate` | boolean | `true` | Manage start dates |
+| `manageCancelledDate` | boolean | `true` | Manage cancelled dates |
+
+### Date Format Settings
+
+Customize the date format for each date type:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `completedDateFormat` | string | `"YYYY-MM-DD"` | Format for completion dates |
+| `startDateFormat` | string | `"YYYY-MM-DD"` | Format for start dates |
+| `cancelledDateFormat` | string | `"YYYY-MM-DD"` | Format for cancelled dates |
+
+**Supported Format Tokens:**
+
+| Token | Example | Description |
+|-------|---------|-------------|
+| `YYYY` | 2025 | 4-digit year |
+| `MM` | 01-12 | 2-digit month |
+| `DD` | 01-31 | 2-digit day |
+| `HH` | 00-23 | 24-hour hours |
+| `mm` | 00-59 | Minutes |
+| `ss` | 00-59 | Seconds |
+
+**Example Formats:**
+- `YYYY-MM-DD` → `2025-01-15`
+- `YYYY-MM-DD HH:mm` → `2025-01-15 14:30`
+- `DD/MM/YYYY` → `15/01/2025`
+
+### Date Marker Settings
+
+Customize the emoji/symbol used for each date type:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `completedDateMarker` | string | `"✅"` | Marker for completion dates |
+| `startDateMarker` | string | `"🚀"` | Marker for start dates |
+| `cancelledDateMarker` | string | `"❌"` | Marker for cancelled dates |
+
+**Example Output with Custom Markers:**
+
+```markdown
+- [x] Task ✅ 2025-01-15
+- [/] Task 🚀 2025-01-10
+- [-] Task ❌ 2025-01-12
+```
+
+**Custom Marker Examples:**
+- Use `[completion::]` for Dataview format
+- Use `📅` for due-date style markers
+- Use any text or emoji you prefer

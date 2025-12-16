@@ -4,6 +4,21 @@
 
 @import "../styles/noise.css";
 
+/* Icon + text headings (MDX lucide icons) */
+:root {
+    --tg-docs-heading-link-display: inline-flex;
+    --tg-docs-heading-link-align-items: center;
+}
+
+:where(h1, h2, h3, h4, h5, h6) > a[data-card].peer {
+    display: var(--tg-docs-heading-link-display);
+    align-items: var(--tg-docs-heading-link-align-items);
+}
+
+:where(h1, h2, h3, h4, h5, h6) > a[data-card].peer > svg {
+    flex: 0 0 auto;
+}
+
 .dark .zimbra-background {
     --pattern-fg: color-mix(
         in oklab,

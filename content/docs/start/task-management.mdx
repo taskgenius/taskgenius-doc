@@ -1,0 +1,113 @@
+---
+title: Deep Task-Management Playbook
+description: "A complete workflow system (capture -> triage -> plan -> execute -> review) mapped to Task Genius features and UI"
+---
+
+import { InboxIcon, CalendarDaysIcon, KanbanIcon, ListChecksIcon, RefreshCcwIcon, FolderKanbanIcon, TimerIcon, SparklesIcon } from "lucide-react";
+
+This page is a workflow blueprint for using Task Genius as a task-management system while keeping tasks as Markdown.
+
+## <InboxIcon className="inline-block" /> Capture
+
+Goal: write tasks immediately, anywhere, without decision fatigue.
+
+- Use plain Markdown tasks in notes as you work
+- If you need a dedicated capture funnel:
+  - [Quick Capture](/docs/quick-capture)
+
+Practical rule:
+
+- If it takes < 30 seconds, do it now; otherwise capture it as a task.
+
+## <ListChecksIcon className="inline-block" /> Triage (Inbox processing)
+
+Goal: turn raw tasks into actionable tasks.
+
+Use the Task View Inbox to process:
+
+- Add a project/context tag if it belongs somewhere
+- Add a date only if it truly has a deadline or a scheduling need
+- Change status only when it changes reality (not mood)
+
+Docs:
+
+- [Task View](/docs/task-view)
+- [Projects](/docs/project)
+- [Date & Priority Management](/docs/date-priority)
+- [Task Status & Cycling](/docs/task-status)
+
+## <KanbanIcon className="inline-block" /> Plan (weekly / sprint / project planning)
+
+Goal: decide what \"in progress\" means and keep WIP under control.
+
+Two strong patterns:
+
+1. **Status-driven planning** (Kanban):
+   - Use Kanban View and status cycles
+   - Keep \"In Progress\" limited
+2. **Date-driven planning** (Calendar / Forecast):
+   - Use Today/Upcoming/Forecast-style views for time constraints
+
+Docs:
+
+- [View Modes](/docs/view-modes)
+- [Status View](/docs/task-view/status-view)
+- [Event View](/docs/task-view/event-view)
+- [Forecast View](/docs/task-view/forecast-view)
+
+## <CalendarDaysIcon className="inline-block" /> Execute (today's work)
+
+Goal: one screen that tells you what to do now.
+
+Recommended setup:
+
+- Use **Today** (and/or Calendar mode) to see time-bound work
+- Use search + filters to cut noise quickly
+- Use bulk selection when you need to batch actions
+
+Docs:
+
+- [View Modes](/docs/view-modes)
+- [Bulk Operations](/docs/bulk-operations)
+- [UI Layer](/docs/task-view/ui-layer)
+
+## <RefreshCcwIcon className="inline-block" /> Review (daily + weekly)
+
+Goal: keep the system honest and prevent backlog rot.
+
+Daily (2-5 minutes):
+
+- Clear obvious completes
+- Re-schedule what won't happen today
+
+Weekly (20-40 minutes):
+
+- Review \"stale\" tasks
+- Archive or move completed blocks
+- Refresh project lists and priorities
+
+Docs:
+
+- [Review View](/docs/task-view/review-view)
+- [Task Mover](/docs/task-mover)
+
+## <FolderKanbanIcon className="inline-block " /> Design choices that scale
+
+- Prefer **workspaces** to separate contexts (work/personal/client) without reinventing your system:
+  - [Workspace](/docs/workspace)
+- Prefer **filters** to create focus, not more tasks:
+  - [Filtering](/docs/filtering)
+- Prefer **plain-text tasks** as the source of truth, and treat views as projections:
+  - [Task View](/docs/task-view)
+
+## <TimerIcon className="inline-block" /> Optional: time awareness
+
+If you want timeboxing and time parsing:
+
+- [Task Timer](/docs/task-timer)
+- [Time Parsing](/docs/time-parsing)
+
+## <SparklesIcon className="inline-block" /> If something looks wrong
+
+- If view results look stale: reopen the Task View or run `Task Genius: Force reindex all tasks`.
+- If a page's UI concept feels unclear: use [UI Layer](/docs/task-view/ui-layer) to map UI to behavior.

@@ -1,5 +1,6 @@
 ---
 title: View
+description: Centralized Task Genius dashboard for navigating, filtering, and acting on tasks across your vault
 ---
 
 import { VersionCallout } from "@/components/VersionCallout";
@@ -36,11 +37,19 @@ Access the view using one of these methods:
 
 ## Interface Overview
 
-The view typically consists of:
+The Fluent Task Genius View is organized into a few predictable regions:
 
-- **Left Panel/Sidebar**: Navigation controls to switch between different views.
-- **Main Panel**: Displays the [list of tasks](/docs/task-view/list-item) based on the current mode and filters. (You can filter by tags, projects, status, etc.)
-- **Right Panel (Details Panel)**: Shows detailed information and allows editing of the currently selected task.
+- 🧭 **Sidebar**: Workspaces + view navigation + projects
+- 🧰 **Top Navigation**: Search + View Mode selector + quick actions
+- 🗂️ **Main Content**: Renders the active view (Inbox/Today/Upcoming/…)
+- 🧾 **Details Panel**: Task details and in-place editing for the current selection (when enabled)
+
+Two layout styles are supported:
+
+- 🧱 **In-view layout (default)**: Sidebar + Details are rendered inside the view.
+- 🧷 **Workspace side leaves mode**: Sidebar/Details live in Obsidian’s side leaves (see [Interface Settings](/docs/interface-settings)).
+
+For a component-level breakdown (including `FluentSidebar`, `FluentTopNavigation`, and `FluentTaskView`), see [UI Layer](/docs/task-view/ui-layer).
 
 ## Views
 
@@ -50,57 +59,57 @@ The Task Genius View offers several views to organize and visualize your tasks:
   <Card
     title="Inbox"
     href="/docs/task-view/inbox-view"
-    description="Shows tasks recently captured or those that haven't been processed or assigned specific metadata (like projects or dates)."
+    description="📥 Triage: newly captured tasks and items not yet organized into projects/dates."
   />
   <Card
     title="Forecast"
     href="/docs/task-view/forecast-view"
-    description="Displays tasks with upcoming due dates, often grouped by day or week."
+    description="📅 Date-driven: upcoming tasks grouped by day/week for planning."
   />
   <Card
     title="Tags"
     href="/docs/task-view/tag-view"
-    description="Groups tasks based on the tags associated with them."
+    description="🏷️ Organize: group tasks by tag to slice your vault-wide workload."
   />
   <Card
     title="Projects"
     href="/docs/task-view/project-view"
-    description="Groups tasks based on #project tags or project metadata."
+    description="🗂️ Project-centric: group tasks by project tag/metadata."
   />
   <Card
     title="Review"
     href="/docs/task-view/review-view"
-    description="Helps you review incomplete tasks or tasks needing attention."
+    description="🔎 Review: surface incomplete tasks and items needing attention."
   />
   <Card
     title="Flag"
     href="/docs/task-view/flag-view"
-    description="Groups tasks based on their priority."
+    description="🚩 Priority: focus on flagged/important tasks first."
   />
   <Card
     title="Event"
     href="/docs/task-view/event-view"
-    description="Use calendar (eg. month/week/day) view to see your tasks in a calendar format."
+    description="🗓️ Calendar: see tasks and events in month/week/day layouts."
   />
   <Card
     title="Status"
     href="/docs/task-view/status-view"
-    description="Groups tasks based on their status (e.g., '- [x]', '- [ ]', '- [!]')."
+    description="🧱 Workflow: group tasks by status marks (e.g., `- [ ]`, `- [x]`, `- [!]`)."
   />
   <Card
     title="Habit"
     href="/docs/task-view/habit-view"
-    description="Fetch metadata from your daily notes and display them in a list."
+    description="🔁 Habits: extract daily-note metadata and track recurring routines."
   />
   <Card
     title="Plan"
     href="/docs/task-view/plan-view"
-    description="View tasks in a Gantt chart view."
+    description="📈 Planning: visualize tasks as a Gantt chart timeline."
   />
   <Card
     title="Custom"
     href="/docs/task-view/custom-view"
-    description="Create a custom view to display tasks in a specific way."
+    description="🧩 Custom: build a specialized view with your own filters and layout."
   />
 </Cards>
 
@@ -129,8 +138,8 @@ The Dataflow architecture maintains a high-performance index of all tasks:
 - **Bases Integration**: Native Obsidian file indexing for notes as tasks ([Learn more](/docs/bases-support))
 
 ### Manual Controls
-If needed, you can manually refresh the index:
-- `Task Genius: Refresh task index` - Quick refresh
-- `Task Genius: Force reindex all tasks` - Complete rebuild
+In normal use the index updates automatically. If results look stale:
+- Close and reopen the Task Genius view
+- Run `Task Genius: Force reindex all tasks` for a complete rebuild
 
 Learn more in the [Task Indexing](/docs/task-view/indexer) documentation.

@@ -1,0 +1,341 @@
+---
+title: File as Task Source
+---
+
+import { VersionCallout } from "@/components/VersionCallout";
+
+Task Genius can treat entire files as tasks, allowing you to manage notes, projects, and documents with the same task management features used for checkbox items.
+
+<VersionCallout version="9.0.0" />
+
+## Overview
+
+File Source enables you to:
+
+- **Recognize files as tasks** based on metadata, tags, templates, or folder paths
+- **Inherit task properties** from file frontmatter (due dates, priority, project, etc.)
+- **Display files in Task Views** alongside regular checkbox tasks
+- **Track file-level progress** and status
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=file-source">
+  Open File Source Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+## Core Settings
+
+### Enable File Source
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enabled` | boolean | `false` |
+
+Toggle to enable the File Source feature.
+
+## Recognition Strategies
+
+Configure how Task Genius identifies files that should be treated as tasks. Multiple strategies can be enabled simultaneously.
+
+### Metadata Recognition
+
+Recognize files based on frontmatter properties.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `recognitionStrategies.metadata.enabled` | boolean | `false` |
+| `recognitionStrategies.metadata.taskFields` | string[] | `[]` |
+| `recognitionStrategies.metadata.requireAllFields` | boolean | `false` |
+
+**Configuration:**
+- `taskFields`: Metadata fields that make a file a task (e.g., `["task", "due", "status"]`)
+- `requireAllFields`: If `true`, all specified fields must be present; if `false`, any field triggers recognition
+
+**Example:**
+```yaml
+---
+task: true
+due: 2025-01-20
+priority: high
+---
+```
+
+### Tag Recognition
+
+Recognize files containing specific tags.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `recognitionStrategies.tags.enabled` | boolean | `false` |
+| `recognitionStrategies.tags.taskTags` | string[] | `[]` |
+| `recognitionStrategies.tags.matchMode` | `"exact"` \| `"prefix"` \| `"contains"` | `"exact"` |
+
+**Match Modes:**
+- `exact`: Tag must match exactly (e.g., `#task`)
+- `prefix`: Tag must start with pattern (e.g., `#task` matches `#task/work`)
+- `contains`: Tag must contain pattern (e.g., `task` matches `#my-task`)
+
+**Example:**
+```markdown
+#task #project/website
+
+# Website Redesign
+
+This file represents a project task.
+```
+
+### Template Recognition
+
+Recognize files created from specific templates.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `recognitionStrategies.templates.enabled` | boolean | `false` |
+| `recognitionStrategies.templates.templatePaths` | string[] | `[]` |
+| `recognitionStrategies.templates.checkTemplateMetadata` | boolean | `false` |
+
+**Configuration:**
+- `templatePaths`: Template file paths or patterns
+- `checkTemplateMetadata`: If `true`, check if file metadata indicates it was created from a template
+
+### Path Recognition
+
+Recognize files based on their location in the vault.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `recognitionStrategies.paths.enabled` | boolean | `false` |
+| `recognitionStrategies.paths.taskPaths` | string[] | `[]` |
+| `recognitionStrategies.paths.matchMode` | `"prefix"` \| `"regex"` \| `"glob"` | `"prefix"` |
+
+**Match Modes:**
+- `prefix`: Path must start with pattern (e.g., `Projects/`)
+- `regex`: Use regular expression matching
+- `glob`: Use glob patterns (e.g., `**/Tasks/**`)
+
+**Example:**
+```
+Projects/
+  Website Redesign.md  ← Recognized as task
+  Mobile App.md        ← Recognized as task
+```
+
+## Metadata Mappings
+
+Map frontmatter properties to standard task fields.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `metadataMappings` | MetadataMappingConfig[] | `[]` |
+
+Each mapping has:
+- `sourceKey`: Source frontmatter key
+- `targetKey`: Target standard metadata field
+- `enabled`: Whether this mapping is active
+
+**Example Mappings:**
+
+| Source Key | Target Key | Description |
+|------------|------------|-------------|
+| `截止日期` | `due` | Map Chinese to standard |
+| `优先级` | `priority` | Map Chinese to standard |
+| `deadline` | `due` | Map alternative name |
+
+## File Task Properties
+
+Configure how file properties are interpreted.
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `fileTaskProperties.contentSource` | `"filename"` \| `"title"` \| `"h1"` \| `"custom"` | `"filename"` | Source for task content |
+| `fileTaskProperties.customContentField` | string | `undefined` | Custom field name if contentSource is "custom" |
+| `fileTaskProperties.stripExtension` | boolean | `true` | Strip file extension from content |
+| `fileTaskProperties.defaultStatus` | string | `" "` | Default status for new file tasks |
+| `fileTaskProperties.defaultPriority` | number | `undefined` | Default priority for new file tasks |
+| `fileTaskProperties.preferFrontmatterTitle` | boolean | `false` | Prefer frontmatter title over filename when updating |
+
+**Content Sources:**
+- `filename`: Use the file name as task content
+- `title`: Use frontmatter `title` field
+- `h1`: Use first H1 heading in file
+- `custom`: Use a custom frontmatter field
+
+## Status Mapping
+
+Map between metadata status values and task status symbols.
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `statusMapping.enabled` | boolean | `false` |
+| `statusMapping.metadataToSymbol` | `Record<string, string>` | `{}` |
+| `statusMapping.symbolToMetadata` | `Record<string, string>` | `{}` |
+| `statusMapping.autoDetect` | boolean | `true` |
+| `statusMapping.caseSensitive` | boolean | `false` |
+
+**Example Mappings:**
+
+```typescript
+// Metadata value → Task symbol
+metadataToSymbol: {
+  "completed": "x",
+  "in-progress": "/",
+  "cancelled": "-",
+  "todo": " "
+}
+
+// Task symbol → Metadata value
+symbolToMetadata: {
+  "x": "completed",
+  "/": "in-progress",
+  "-": "cancelled",
+  " ": "todo"
+}
+```
+
+## Relationships
+
+Configure relationships between files and child tasks.
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `relationships.enableChildRelationships` | boolean | `false` | Enable file-task to child-task relationships |
+| `relationships.enableMetadataInheritance` | boolean | `false` | Inherit metadata from file to child tasks |
+| `relationships.inheritanceFields` | string[] | `[]` | Metadata fields to inherit |
+
+**Inheritance Example:**
+
+File: `Projects/Website.md`
+```yaml
+---
+project: Website
+priority: high
+---
+```
+
+Child tasks in this file inherit `project: Website` and `priority: high`.
+
+## Performance
+
+Configure performance optimizations.
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `performance.enableWorkerProcessing` | boolean | `true` | Use Web Workers for processing |
+| `performance.enableCaching` | boolean | `true` | Cache file task results |
+| `performance.cacheTTL` | number | `300000` | Cache time-to-live in milliseconds (5 min) |
+
+## Settings Reference
+
+### All File Source Settings
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enabled` | boolean | `false` |
+| `recognitionStrategies.metadata.enabled` | boolean | `false` |
+| `recognitionStrategies.metadata.taskFields` | string[] | `[]` |
+| `recognitionStrategies.metadata.requireAllFields` | boolean | `false` |
+| `recognitionStrategies.tags.enabled` | boolean | `false` |
+| `recognitionStrategies.tags.taskTags` | string[] | `[]` |
+| `recognitionStrategies.tags.matchMode` | string | `"exact"` |
+| `recognitionStrategies.templates.enabled` | boolean | `false` |
+| `recognitionStrategies.templates.templatePaths` | string[] | `[]` |
+| `recognitionStrategies.templates.checkTemplateMetadata` | boolean | `false` |
+| `recognitionStrategies.paths.enabled` | boolean | `false` |
+| `recognitionStrategies.paths.taskPaths` | string[] | `[]` |
+| `recognitionStrategies.paths.matchMode` | string | `"prefix"` |
+| `metadataMappings` | array | `[]` |
+| `fileTaskProperties.contentSource` | string | `"filename"` |
+| `fileTaskProperties.stripExtension` | boolean | `true` |
+| `fileTaskProperties.defaultStatus` | string | `" "` |
+| `fileTaskProperties.preferFrontmatterTitle` | boolean | `false` |
+| `statusMapping.enabled` | boolean | `false` |
+| `statusMapping.autoDetect` | boolean | `true` |
+| `statusMapping.caseSensitive` | boolean | `false` |
+| `relationships.enableChildRelationships` | boolean | `false` |
+| `relationships.enableMetadataInheritance` | boolean | `false` |
+| `relationships.inheritanceFields` | string[] | `[]` |
+| `performance.enableWorkerProcessing` | boolean | `true` |
+| `performance.enableCaching` | boolean | `true` |
+| `performance.cacheTTL` | number | `300000` |
+
+## Use Cases
+
+### Project Management
+
+Treat project notes as tasks:
+
+```yaml
+---
+due: 2025-03-31
+priority: high
+status: in-progress
+---
+
+# Website Redesign Project
+
+## Objectives
+- Improve user experience
+- Increase conversion rate
+```
+
+### Document Tracking
+
+Track documents that need review:
+
+```yaml
+---
+task: true
+due: 2025-01-25
+status: todo
+---
+
+# Quarterly Report
+
+This report needs to be completed by end of month.
+```
+
+### Knowledge Base Updates
+
+Mark knowledge base articles that need updating:
+
+```markdown
+#task #needs-update
+
+# API Reference
+
+Last updated: 2024-06-15
+```
+
+## Best Practices
+
+1. **Choose one primary recognition strategy** for consistency
+2. **Use consistent frontmatter** across task files
+3. **Set up status mapping** if using custom status values
+4. **Enable caching** for large vaults
+
+## Troubleshooting
+
+### Files Not Recognized
+
+- Verify recognition strategy is enabled
+- Check frontmatter syntax (valid YAML)
+- Confirm file matches recognition criteria
+- Force reindex: `Task Genius: Force reindex all tasks`
+
+### Status Not Syncing
+
+- Verify status mapping is enabled
+- Check mapping configuration matches your values
+- Ensure case sensitivity setting is correct
+
+### Performance Issues
+
+- Enable worker processing
+- Enable caching
+- Consider using path-based recognition (most efficient)
+
+## Related Features
+
+- [File Filter](/docs/file-filter): Control which files are processed
+- [Projects](/docs/project): Project-based task organization
+- [Quick Capture](/docs/quick-capture): Create file tasks with Quick Capture
+- [Task View](/docs/task-view): View and manage file tasks

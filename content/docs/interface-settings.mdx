@@ -1,0 +1,120 @@
+---
+title: Interface Settings
+description: Configure how Task Genius displays in your Obsidian workspace
+---
+
+import { VersionCallout } from "@/components/VersionCallout";
+
+# Interface Settings
+
+<VersionCallout version="9.9.0" />
+
+Interface settings allow you to customize how Task Genius integrates with your Obsidian workspace, including sidebar behavior and view overflow management.
+
+## Getting Started
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=interface">
+  Open Interface Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+1. Open Task Genius settings
+2. Navigate to the **Interface** settings tab
+3. Configure the options below to suit your workflow
+
+## Settings
+
+### Use Workspace Side Leaves
+
+Control whether Task Genius uses Obsidian's workspace side leaves (left/right panels) for displaying the sidebar and task details.
+
+| Setting | Description |
+|---------|-------------|
+| **Enabled** | Sidebar and Details panels appear in Obsidian's native left/right workspace areas |
+| **Disabled** | Sidebar and Details render within the main Task Genius view (default) |
+
+**When to enable:**
+
+- You prefer a more integrated look with Obsidian's native layout
+- You want the sidebar to persist when switching between different views
+- You use multiple monitors and want to keep task details visible
+
+**When to disable:**
+
+- You want a self-contained Task Genius experience
+- You prefer not to occupy the workspace side panels
+- You want the full Task Genius interface in a single view
+
+<Callout type="info">
+After changing this setting, you need to **reopen the Task Genius view** for changes to take effect.
+</Callout>
+
+**Default:** `false` (disabled)
+
+---
+
+### Max Other Views Before Overflow
+
+Control how many "Other Views" are displayed in the sidebar before the remaining views are grouped into an overflow menu (ellipsis button).
+
+| Setting | Description |
+|---------|-------------|
+| **Value** | Number between 1 and 50 |
+| **Default** | 5 |
+
+**How it works:**
+
+The Task Genius sidebar displays built-in views (Inbox, Today, Upcoming, etc.) and custom views. When you have many custom views, this setting prevents the sidebar from becoming too cluttered:
+
+1. Views up to the configured number display normally
+2. Additional views are grouped under an "..." (ellipsis) overflow menu
+3. Click the overflow menu to access hidden views
+
+**Example configurations:**
+
+| Value | Behavior |
+|-------|----------|
+| `3` | Show 3 views, rest in overflow menu |
+| `5` | Show 5 views, rest in overflow menu (default) |
+| `10` | Show 10 views before overflow |
+| `50` | Effectively disable overflow (show all views) |
+
+<Callout type="tip">
+If you have a large screen or prefer seeing all views at once, increase this value. For smaller screens or a cleaner sidebar, use a lower value.
+</Callout>
+
+---
+
+## Use Cases
+
+### Minimal Sidebar
+
+For users who prefer a clean, minimal sidebar:
+
+1. Set **Max other views before overflow** to `3`
+2. Keep your most-used views visible
+3. Access less-used views through the overflow menu
+
+### Full View Access
+
+For users who want quick access to all views:
+
+1. Set **Max other views before overflow** to a high value (e.g., `20`)
+2. All your custom views will be visible without clicking overflow
+3. Consider enabling **Use workspace side leaves** for more space
+
+### Multi-Monitor Setup
+
+For users with multiple monitors:
+
+1. Enable **Use workspace side leaves**
+2. Position Obsidian's side panels on your secondary monitor
+3. Keep the main Task Genius view on your primary monitor
+4. Benefit from persistent sidebar and details visibility
+
+## Related Features
+
+- [Task View](/docs/task-view): Learn about the main task management interface
+- [UI Layer](/docs/task-view/ui-layer): Sidebar/top navigation structure and behavior
+- [Custom Views](/docs/task-view/custom-view): Create and manage custom views
+- [Workspace](/docs/workspace): Manage multiple workspace configurations

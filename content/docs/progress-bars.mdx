@@ -4,126 +4,324 @@ title: Progress Bar
 
 import { VersionCallout } from "@/components/VersionCallout";
 
-Task Genius automatically adds progress indicators to parent items (tasks, list items, or even headings) based on the completion status of their direct sub-tasks or nested sub-items.
+Task Genius automatically adds progress indicators to parent items (tasks, list items, or headings) based on the completion status of their sub-tasks.
 
-## Example
+## Overview
 
-```markdown
-- [ ] Parent Task [||||----] [✓:4 ⟳:1 ?:1 / 8] // Example with graphical bar and custom text format
-  - [x] Sub-task 1
-  - [x] Sub-task 2
-  - [/] Sub-task 3 [-] [✓:0 ⟳:0 ?:0 / 8]
-    - [ ] Sub-task 4
-  - [-] Sub-task 5 (Abandoned - might be excluded from count based on settings)
-  - [?] Sub-task 6 (Planned)
-  - [x] Sub-task 7
-  - [x] Sub-task 8
-```
-
-## Customization
+Progress bars provide visual feedback on task completion, helping you track progress at a glance. They can display as graphical bars, text indicators, or both.
 
 <DeepLinkButton href="obsidian://task-genius/settings?tab=progress-bar">
   Open Progress Bar Settings
 </DeepLinkButton>
 <DeepLinkFallback />
 
-You can heavily customize the appearance and behavior of progress bars in the plugin settings:
+## Example
 
-### Display mode
+```markdown
+- [ ] Parent Task [||||----] [4/8]
+  - [x] Sub-task 1
+  - [x] Sub-task 2
+  - [/] Sub-task 3 (In Progress)
+  - [-] Sub-task 4 (Abandoned)
+  - [?] Sub-task 5 (Planned)
+  - [x] Sub-task 6
+  - [x] Sub-task 7
+  - [ ] Sub-task 8
+```
+
+## Display Settings
+
+### Progress Bar Display Mode
 
 <VersionCallout version="7.0.0" />
 
-Choose whether to show a graphical bar (`[||||----]`), a text indicator, both, or none at all (`progressBarDisplayMode` setting).
+Control how progress is visualized with the `progressBarDisplayMode` setting.
 
-### Text format
+| Mode | Description | Example |
+|------|-------------|---------|
+| `none` | No progress indicator shown | (hidden) |
+| `graphical` | Visual bar only | `[||||----]` |
+| `text` | Text indicator only | `[4/8]` |
+| `both` | Both graphical and text | `[||||----] [4/8]` |
+
+**Default:** `both`
+
+### Text Format Options
 
 <VersionCallout version="7.0.0" />
 
-When text indicators are enabled, you can precisely control their content and appearance using the `progressBarFormat` settings:
+When text indicators are enabled, customize their format with `displayMode`:
 
-#### Display mode
+| Format | Description | Example |
+|--------|-------------|---------|
+| `percentage` | Percentage complete | `75%` |
+| `bracketPercentage` | Percentage in brackets | `[75%]` |
+| `fraction` | Completed vs total | `6/8` |
+| `bracketFraction` | Fraction in brackets | `[6/8]` |
+| `detailed` | Detailed breakdown | `[✓:6 ⟳:1 ?:1 / 8]` |
+| `custom` | Custom template | (user-defined) |
+| `range-based` | Text based on percentage ranges | (configurable) |
 
-- **Display Mode**: Select the basic text format:
-  - `percentage`: Shows completed percentage (e.g., `75%`).
-  - `fraction`: Shows completed vs. total (e.g., `[6/8]`).
-  - `range-based`: Displays text defined for specific percentage ranges (see below).
-  - `custom`: Allows complete control using a custom template string.
+**Default:** `bracketFraction`
 
-#### Range-based text
+### Custom Format Template
+
+<VersionCallout version="7.0.0" />
+
+When `displayMode` is set to `custom`, define output using template placeholders:
+
+**Available Placeholders:**
+
+| Placeholder | Description |
+|-------------|-------------|
+| `{{COMPLETED}}` | Number of completed tasks |
+| `{{TOTAL}}` | Total number of tasks |
+| `{{PERCENT}}` | Completion percentage |
+| `{{IN_PROGRESS}}` | Number of in-progress tasks |
+| `{{ABANDONED}}` | Number of abandoned tasks |
+| `{{PLANNED}}` | Number of planned tasks |
+| `{{NOT_STARTED}}` | Number of not started tasks |
+| `{{COMPLETED_SYMBOL}}` | Symbol for completed status |
+| `{{IN_PROGRESS_SYMBOL}}` | Symbol for in-progress status |
+| `{{ABANDONED_SYMBOL}}` | Symbol for abandoned status |
+| `{{PLANNED_SYMBOL}}` | Symbol for planned status |
+| `{{NOT_STARTED_SYMBOL}}` | Symbol for not started status |
+
+**JavaScript Expressions:**
+
+Embed expressions within `${=...}` for dynamic text:
+
+```javascript
+${="=".repeat(Math.floor(data.percentages.completed/10))}
+```
+
+**Examples:**
+
+```
+[{{COMPLETED}}/{{TOTAL}}]                    → [6/8]
+{{PERCENT}}% Done                            → 75% Done
+[{{COMPLETED_SYMBOL}}:{{COMPLETED}} / {{TOTAL}}] → [✓:6 / 8]
+```
+
+### Range-Based Text
 
 <VersionCallout version="5.0.0" />
 
-If `Display Mode` is `range-based`, you can define specific text templates for different percentage completion ranges (e.g., 0-20%, 20-50%, 50-100%). Use the `{{PROGRESS}}` placeholder for the current percentage within these templates.
+Define custom text for different completion percentage ranges:
 
-#### Custom format template
+| Setting | Type | Description |
+|---------|------|-------------|
+| `customizeProgressRanges` | boolean | Enable range-based text |
+| `progressRanges` | array | Array of range definitions |
 
-<VersionCallout version="7.0.0" />
+**Range Definition:**
 
-If `Display Mode` is set to `custom`, you define the output using a template string.
-
-- **Placeholders**: Use placeholders like `{{COMPLETED}}`, `{{TOTAL}}`, `{{PERCENT}}`, `{{IN_PROGRESS}}`, `{{ABANDONED}}`, `{{PLANNED}}`, `{{NOT_STARTED}}`.
-- **Status Symbols**: Use `{{COMPLETED_SYMBOL}}`, `{{IN_PROGRESS_SYMBOL}}`, `{{ABANDONED_SYMBOL}}`, `{{PLANNED_SYMBOL}}`, `{{NOT_STARTED_SYMBOL}}` to insert the configured symbols for each status.
-- **Expressions**: Embed JavaScript expressions within `${=...}` for dynamic text. Example: `${="=".repeat(Math.floor(data.percentages.completed/10))}` creates a simple text bar. You have access to the `data` object (containing counts and percentages) and `displaySymbols` within expressions.
-
-**Examples**:
-
-```ts
-// Example 1
-[{{COMPLETED}}/{{TOTAL}}] -> [6/8]
-
-// Example 2
-{{PERCENT}}% Done -> 75% Done
-
-// Example 3
-[{{COMPLETED_SYMBOL}}:{{COMPLETED}} {{IN_PROGRESS_SYMBOL}}:{{IN_PROGRESS}} / {{TOTAL}}] -> [✓:6 ⟳:1 / 8]
-
-// Example 4
-Progress: ${="🟩".repeat(Math.floor(data.percentages.completed/10))}${"⬜".repeat(10-Math.floor(data.percentages.completed/10))} -> Progress: 🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜
+```typescript
+{
+  min: number,   // Minimum percentage (inclusive)
+  max: number,   // Maximum percentage (exclusive)
+  text: string   // Text template with `{{PROGRESS}}` placeholder
+}
 ```
 
-### Status display symbols
+**Default Ranges:**
 
-Customize the symbols used for each task status in the text format (defaults are derived from your task status settings, e.g., `✓`, `⟳`, `✗`, `?`, ` `).
+| Range | Text |
+|-------|------|
+| 0-20% | `"Just started {{PROGRESS}}%"` |
+| 20-40% | `"Making progress {{PROGRESS}}%"` |
+| 40-60% | `"Half way {{PROGRESS}}%"` |
+| 60-80% | `"Good progress {{PROGRESS}}%"` |
+| 80-100% | `"Almost there {{PROGRESS}}%"` |
 
-### Counting
+## Counting Configuration
 
-Configure which sub-item statuses count towards completion (e.g., exclude `[-]` or `[?]`). Decide whether to count only direct children or all nested sub-items (`countSubLevel`).
+### Count Sub-Levels
 
-### Target items
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `countSubLevel` | boolean | `false` | Count all nested sub-items, not just direct children |
 
-Enable/disable progress bars on regular list items (`Add ProgressBar To Non-Task Bullet`), headings (`Add ProgressBar To Heading`), or only task items.
+When enabled, progress includes all descendant tasks. When disabled, only immediate children are counted.
 
-### Conditional hiding
+### Show Percentage
 
-Hide progress bars based on specific tags (`Hide ProgressBar Tags`), parent tags, file paths (`Hide ProgressBar Folders`), or frontmatter metadata (`Hide ProgressBar Metadata`).
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `showPercentage` | boolean | `false` | Show percentage in progress display |
 
-#### Show on heading
+## Target Items
+
+Control where progress bars appear:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `addProgressBarToNonTaskBullet` | boolean | `false` | Add progress bars to regular list items (not just tasks) |
+| `addTaskProgressBarToHeading` | boolean | `false` | Add progress bars to headings with sub-tasks |
+| `addProgressBarToProjectsView` | boolean | `false` | Show progress bars in the Projects view |
+| `enableProgressbarInReadingMode` | boolean | `false` | Enable progress bars in Reading Mode |
+
+<VersionCallout version="4.0.0" />
+
+Reading Mode support was added in version 4.0.0.
+
+## Conditional Display
+
+### Hide Progress Bar Based on Conditions
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `hideProgressBarBasedOnConditions` | boolean | `false` | Enable conditional hiding |
+| `hideProgressBarTags` | string | `"no-progress,hide-progress"` | Tags that hide progress bars (comma-separated) |
+| `hideProgressBarFolders` | string | `""` | Folder paths that hide progress bars |
+| `hideProgressBarMetadata` | string | `"hide-progress-bar"` | Frontmatter key that hides progress bars |
+
+**Example - Hide by Tag:**
+
+```markdown
+- [ ] Task without progress bar #no-progress
+  - [x] Sub-task 1
+  - [ ] Sub-task 2
+```
+
+**Example - Hide by Frontmatter:**
+
+```yaml
+---
+hide-progress-bar: true
+---
+```
+
+### Show Progress Bar on Specific Headings
 
 <VersionCallout version="8.6.0" />
 
-Show progress bars on headings only (`Show ProgressBar On Heading`). Support using comma to separate multiple heading names (eg., "# Heading 1, # Heading 2").
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `showProgressBarBasedOnHeading` | string | `""` | Only show progress bars under specific headings |
 
-### Other
+Use comma-separated heading names to restrict where progress bars appear:
 
-<Callout
-  type="note"
->
-  Available since <strong className="text-primary">4.0.0</strong>
+```
+## Tasks, ## Todo, ## Project Tasks
+```
 
-Enable/disable in Reading Mode (`Enable progressbar in reading mode`).
+## Custom Progress Goal
 
-</Callout>
+<VersionCallout version="8.0.0" />
 
-<Callout type="note">
-  Available since <strong className="text-primary">6.0.0</strong>
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `allowCustomProgressGoal` | boolean | `false` | Enable custom goals via inline fields |
 
-Show detailed progress on hover (`Support hover to show progress info`).
+When enabled, use `g::number` to set a custom total:
 
-</Callout>
+```markdown
+- [ ] Project with custom goal g::10
+  - [x] Task 1
+  - [x] Task 2
+  - [x] Task 3
+```
 
-<Callout type="note">
-  Available since <strong className="text-primary">8.0.0</strong>
+Progress shows `3/10` instead of `3/3`.
 
-Use custom goals via `g::number` inline fields (`Allow custom progress goal`).
+## Hover Information
 
-</Callout>
+<VersionCallout version="6.0.0" />
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `supportHoverToShowProgressInfo` | boolean | `false` | Show detailed progress on hover |
+
+When enabled, hovering over a progress bar displays:
+- Breakdown by status (completed, in-progress, etc.)
+- Percentage complete
+- Task counts
+
+## Settings Reference
+
+### All Progress Bar Settings
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `progressBarDisplayMode` | `"none" \| "graphical" \| "text" \| "both"` | `"both"` |
+| `displayMode` | string | `"bracketFraction"` |
+| `customFormat` | string | `"[{{COMPLETED}}/{{TOTAL}}]"` |
+| `showPercentage` | boolean | `false` |
+| `customizeProgressRanges` | boolean | `false` |
+| `progressRanges` | array | (see defaults above) |
+| `countSubLevel` | boolean | `false` |
+| `addProgressBarToNonTaskBullet` | boolean | `false` |
+| `addTaskProgressBarToHeading` | boolean | `false` |
+| `addProgressBarToProjectsView` | boolean | `false` |
+| `enableProgressbarInReadingMode` | boolean | `false` |
+| `allowCustomProgressGoal` | boolean | `false` |
+| `hideProgressBarBasedOnConditions` | boolean | `false` |
+| `hideProgressBarTags` | string | `"no-progress,hide-progress"` |
+| `hideProgressBarFolders` | string | `""` |
+| `hideProgressBarMetadata` | string | `"hide-progress-bar"` |
+| `showProgressBarBasedOnHeading` | string | `""` |
+| `supportHoverToShowProgressInfo` | boolean | `false` |
+
+## Best Practices
+
+### Organizing Tasks for Progress Tracking
+
+```markdown
+## Project Alpha
+- [ ] Phase 1
+  - [x] Research
+  - [x] Planning
+  - [ ] Implementation
+- [ ] Phase 2
+  - [ ] Testing
+  - [ ] Deployment
+```
+
+### Using Custom Formats for Teams
+
+```
+[{{COMPLETED_SYMBOL}}:{{COMPLETED}} {{IN_PROGRESS_SYMBOL}}:{{IN_PROGRESS}} / {{TOTAL}}]
+```
+
+Output: `[✓:4 ⟳:2 / 10]`
+
+### Excluding Administrative Tasks
+
+Use `#no-progress` tag for tasks that shouldn't affect progress:
+
+```markdown
+- [ ] Main Project [4/5]
+  - [x] Task 1
+  - [x] Task 2
+  - [ ] Task 3
+  - [x] Task 4
+  - [x] Task 5
+  - [ ] Notes and References #no-progress
+```
+
+## Troubleshooting
+
+### Progress Bar Not Showing
+
+- Check `progressBarDisplayMode` is not set to `none`
+- Verify the item has sub-tasks
+- Check if conditional hiding rules apply
+- Ensure you're in Live Preview or Reading Mode (if enabled)
+
+### Incorrect Progress Count
+
+- Check `countSubLevel` setting
+- Verify task status markers match your configuration
+- Check excluded markers in Task Status settings
+
+### Progress Bar in Wrong Location
+
+- Review `showProgressBarBasedOnHeading` setting
+- Check `hideProgressBarFolders` paths
+
+## Related Features
+
+- [Task Status](/docs/task-status): Configure which task markers count toward progress
+- [Task View](/docs/task-view): View aggregated progress across your vault
+- [Projects](/docs/project): Project-level progress tracking

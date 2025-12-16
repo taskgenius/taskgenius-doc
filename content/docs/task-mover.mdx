@@ -2,27 +2,230 @@
 title: Move Tasks
 ---
 
-Keep your active notes tidy by archiving completed or specific groups of sub-tasks to a designated location using Task Mover commands.
+import { VersionCallout } from "@/components/VersionCallout";
 
-## Usage
+Keep your active notes tidy by archiving completed or moving specific groups of sub-tasks to a designated location using Task Mover commands.
 
-Place your cursor on the parent task line whose sub-tasks you want to move. Then, use the Obsidian command palette (`Ctrl/Cmd + P`) to run one of the available commands:
+<VersionCallout version="6.0.0" />
 
-- **`Task Genius: Move all completed subtasks to other file`**: Moves only the sub-tasks marked as complete (e.g., `[x]`) under the current parent task.
-- **`Task Genius: Move direct completed subtasks to other file`**: Moves only the _direct_ children marked as complete, ignoring nested completed tasks.
-- **`Task Genius: Move all subtasks to other file`**: Moves _all_ sub-tasks (regardless of status) under the current parent task.
-- **`Task Genius: Move task to other file`**: Moves the task line the cursor is currently on (could be a parent or a sub-task).
-- **`Task Genius: Move direct incomplete subtasks to other file`**: Moves only the _direct_ children marked as incomplete, ignoring nested incomplete tasks.
-- **`Task Genius: Move all incomplete subtasks to other file`**: Moves _all_ sub-tasks (regardless of status) under the current parent task.
+## Overview
 
-## Settings
+Task Mover provides flexible options for organizing your tasks:
 
-In the Task Genius settings (in the "Task Mover" section), you can configure:
+- **Move completed tasks** to an archive file
+- **Move incomplete tasks** to a backlog or different file
+- **Auto-move** tasks automatically when they're completed
+- **Add markers** (timestamps, links) when moving tasks
 
-- **Destination File**: Specify the path to the file where tasks should be moved (e.g., `Archive/Completed Tasks.md`). This often uses the same setting as Quick Capture's target file.
-- **Formatting**: Add markers or context when moving tasks, such as:
-  - Timestamping: Automatically add the date/time of archival (e.g., using `{{DATE:YYYY-MM-DD}}`).
-  - Link Back: Optionally add a link back to the original source note.
-- **Behavior**: Choose whether to append to the destination file, prepend, or replace specific sections.
+<DeepLinkButton href="obsidian://task-genius/settings?tab=task-mover">
+  Open Task Mover Settings
+</DeepLinkButton>
+<DeepLinkFallback />
 
-- **Enable incomplete subtask mover**: If enabled, the "Move all incomplete subtasks to other file" command will be available.
+## Available Commands
+
+Place your cursor on the parent task line whose sub-tasks you want to move, then use the Obsidian command palette (`Ctrl/Cmd + P`):
+
+### Completed Task Commands
+
+| Command | Description |
+|---------|-------------|
+| `Move all completed subtasks to other file` | Moves all sub-tasks marked as complete (`[x]`) under the current parent task |
+| `Move direct completed subtasks to other file` | Moves only direct children marked as complete, ignoring nested completed tasks |
+| `Move task to other file` | Moves the task line the cursor is currently on |
+
+### Incomplete Task Commands
+
+<VersionCallout version="8.0.0" />
+
+| Command | Description |
+|---------|-------------|
+| `Move all incomplete subtasks to other file` | Moves all sub-tasks that are not completed |
+| `Move direct incomplete subtasks to other file` | Moves only direct incomplete children |
+| `Move all subtasks to other file` | Moves all sub-tasks regardless of status |
+
+## Completed Task Mover Settings
+
+### Enable Completed Task Mover
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enableCompletedTaskMover` | boolean | `false` |
+
+Toggle to enable the completed task mover functionality.
+
+### Task Marker Type
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `taskMarkerType` | `"version"` \| `"date"` \| `"custom"` | `"date"` | Type of marker to add when moving tasks |
+
+**Options:**
+- **version**: Add a version marker (e.g., `version 1.0`)
+- **date**: Add the current date (e.g., `archived on 2025-01-15`)
+- **custom**: Use a custom template with date placeholders
+
+### Marker Templates
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `versionMarker` | string | `"version 1.0"` |
+| `dateMarker` | string | `"archived on {{date}}"` |
+| `customMarker` | string | `"moved {{DATE:YYYY-MM-DD HH:mm}}"` |
+
+**Custom Marker Placeholders:**
+- `{{date}}` - Current date in default format
+- `{{DATE:FORMAT}}` - Custom date format (e.g., `{{DATE:YYYY-MM-DD HH:mm}}`)
+
+### Behavior Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `treatAbandonedAsCompleted` | boolean | `false` | Include abandoned tasks (`[-]`) when moving completed tasks |
+| `completeAllMovedTasks` | boolean | `true` | Mark all moved tasks as completed |
+| `withCurrentFileLink` | boolean | `true` | Add a link back to the original source file |
+
+### Auto-Move Settings
+
+<VersionCallout version="9.0.0" />
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `enableAutoMove` | boolean | `false` | Automatically move tasks when they're completed |
+| `defaultTargetFile` | string | `"Archive.md"` | Default file for auto-moved tasks |
+| `defaultInsertionMode` | `"beginning"` \| `"end"` \| `"after-heading"` | `"end"` | Where to insert moved tasks |
+| `defaultHeadingName` | string | `"Completed Tasks"` | Heading name when using `after-heading` mode |
+
+**Example with Auto-Move:**
+
+When you complete a task (`- [ ]` → `- [x]`), it's automatically moved to the configured target file.
+
+## Incomplete Task Mover Settings
+
+<VersionCallout version="8.0.0" />
+
+### Enable Incomplete Task Mover
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enableIncompletedTaskMover` | boolean | `true` |
+
+Toggle to enable incomplete task mover commands.
+
+### Incomplete Task Marker Type
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `incompletedTaskMarkerType` | `"version"` \| `"date"` \| `"custom"` | `"date"` |
+
+Same options as completed task marker.
+
+### Incomplete Marker Templates
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `incompletedVersionMarker` | string | `"version 1.0"` |
+| `incompletedDateMarker` | string | `"moved on {{date}}"` |
+| `incompletedCustomMarker` | string | `"moved {{DATE:YYYY-MM-DD HH:mm}}"` |
+
+### Incomplete Task Behavior
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `withCurrentFileLinkForIncompleted` | boolean | `true` |
+
+### Incomplete Auto-Move Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `enableIncompletedAutoMove` | boolean | `false` | Automatically move incomplete tasks |
+| `incompletedDefaultTargetFile` | string | `"Backlog.md"` | Target file for incomplete tasks |
+| `incompletedDefaultInsertionMode` | `"beginning"` \| `"end"` \| `"after-heading"` | `"end"` | Where to insert |
+| `incompletedDefaultHeadingName` | string | `"Incomplete Tasks"` | Heading name for `after-heading` mode |
+
+## Settings Reference
+
+### All Task Mover Settings
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enableCompletedTaskMover` | boolean | `false` |
+| `taskMarkerType` | string | `"date"` |
+| `versionMarker` | string | `"version 1.0"` |
+| `dateMarker` | string | `"archived on {{date}}"` |
+| `customMarker` | string | `"moved {{DATE:YYYY-MM-DD HH:mm}}"` |
+| `treatAbandonedAsCompleted` | boolean | `false` |
+| `completeAllMovedTasks` | boolean | `true` |
+| `withCurrentFileLink` | boolean | `true` |
+| `enableAutoMove` | boolean | `false` |
+| `defaultTargetFile` | string | `"Archive.md"` |
+| `defaultInsertionMode` | string | `"end"` |
+| `defaultHeadingName` | string | `"Completed Tasks"` |
+| `enableIncompletedTaskMover` | boolean | `true` |
+| `incompletedTaskMarkerType` | string | `"date"` |
+| `incompletedVersionMarker` | string | `"version 1.0"` |
+| `incompletedDateMarker` | string | `"moved on {{date}}"` |
+| `incompletedCustomMarker` | string | `"moved {{DATE:YYYY-MM-DD HH:mm}}"` |
+| `withCurrentFileLinkForIncompleted` | boolean | `true` |
+| `enableIncompletedAutoMove` | boolean | `false` |
+| `incompletedDefaultTargetFile` | string | `"Backlog.md"` |
+| `incompletedDefaultInsertionMode` | string | `"end"` |
+| `incompletedDefaultHeadingName` | string | `"Incomplete Tasks"` |
+
+## Use Cases
+
+### Daily Note Cleanup
+
+Move completed tasks from daily notes to an archive at the end of each day:
+
+1. Enable `enableCompletedTaskMover`
+2. Set `defaultTargetFile` to `Archive/Completed.md`
+3. Use `Move all completed subtasks to other file` command
+
+### Sprint Backlog Management
+
+Move incomplete tasks from the current sprint to the next:
+
+1. Enable `enableIncompletedTaskMover`
+2. Set `incompletedDefaultTargetFile` to `Sprints/Backlog.md`
+3. Use `Move all incomplete subtasks to other file`
+
+### Automatic Archiving
+
+Enable auto-move for hands-free task organization:
+
+1. Enable `enableAutoMove`
+2. Set `defaultTargetFile` to your archive
+3. Tasks are automatically moved when completed
+
+## Best Practices
+
+- **Use consistent target files** for predictable organization
+- **Enable source links** (`withCurrentFileLink`) to trace task origins
+- **Use date markers** to track when tasks were moved
+- **Set up auto-move** for frequently completed task types
+
+## Troubleshooting
+
+### Tasks Not Moving
+
+- Verify the command is available in the command palette
+- Check that the target file path is valid
+- Ensure Task Mover is enabled in settings
+
+### Links Not Working
+
+- Verify `withCurrentFileLink` is enabled
+- Check that the source file path is correctly formatted
+
+### Auto-Move Not Triggering
+
+- Confirm `enableAutoMove` is enabled
+- Check that the task status change matches completion criteria
+- Verify `defaultTargetFile` exists or can be created
+
+## Related Features
+
+- [Quick Capture](/docs/quick-capture): Create tasks that can later be moved
+- [Task Status](/docs/task-status): Configure which statuses trigger auto-move
+- [Workflows](/docs/workflows): Combine with workflow stages for automated organization

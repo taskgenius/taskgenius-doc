@@ -1,0 +1,54 @@
+---
+title: Client Configuration
+description: Choose your AI client and connect it to Task Genius MCP
+---
+
+Task Genius MCP works with any client that supports HTTP MCP servers and custom headers.
+
+Start by enabling MCP in Task Genius and copying your endpoint and credentials from settings.
+
+<Cards>
+  <Card
+    title="Cursor"
+    href="/docs/mcp-integration/clients/cursor"
+    description="Install via Cursor deeplink and verify tools."
+  />
+  <Card
+    title="Claude Desktop"
+    href="/docs/mcp-integration/clients/claude-desktop"
+    description="Configure MCP server in Claude Desktop."
+  />
+  <Card
+    title="Claude Code"
+    href="/docs/mcp-integration/clients/claude-code"
+    description="Connect Claude Code to Task Genius MCP."
+  />
+  <Card
+    title="VS Code"
+    href="/docs/mcp-integration/clients/vscode"
+    description="Set up MCP servers in VS Code."
+  />
+  <Card
+    title="Windsurf"
+    href="/docs/mcp-integration/clients/windsurf"
+    description="Generic setup guidance for Windsurf."
+  />
+  <Card
+    title="Zed"
+    href="/docs/mcp-integration/clients/zed"
+    description="Generic setup guidance for Zed."
+  />
+  <Card
+    title="Custom Client"
+    href="/docs/mcp-integration/clients/custom"
+    description="Connect any MCP-capable tool via HTTP + JSON-RPC."
+  />
+</Cards>
+
+## Shared Settings (All Clients)
+
+- **URL**: `http://127.0.0.1:7777/mcp` (or your configured port)
+- **Header**: `Authorization`
+- **Value**: `Bearer <TOKEN>+<APP_ID>`
+
+If requests fail, see [Troubleshooting](/docs/mcp-integration/troubleshooting).

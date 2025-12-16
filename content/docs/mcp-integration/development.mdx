@@ -1,0 +1,32 @@
+---
+title: Development
+description: Build your own MCP client integration for Task Genius
+---
+
+Task Genius exposes an MCP (Model Context Protocol) server over HTTP so external tools can query and update your tasks.
+
+This page is for developers building custom integrations or automations.
+
+## Protocol Summary
+
+- **Endpoint**: `http://127.0.0.1:<port>/mcp` (default port is `7777`)
+- **Transport**: HTTP + JSON-RPC 2.0
+- **Auth**: `Authorization: Bearer <TOKEN>+<APP_ID>`
+
+Use Task Genius settings to copy the endpoint URL, token, and app id.
+
+## What to Implement in a Client
+
+1. **List tools** (discover capabilities)
+2. **Call tools** (query/create/update tasks)
+3. **Handle errors** (auth failures, schema validation, port conflicts)
+
+The complete tool list and request/response shapes are documented in [API Reference](/docs/mcp-integration/api-reference).
+
+## Local-Only by Default
+
+The MCP server is intended to run on your local machine. Treat credentials as secrets and avoid exposing the port publicly.
+
+For operational guidance, see:
+- [Security](/docs/mcp-integration/security)
+- [Monitoring & Alerting](/docs/mcp-integration/monitoring)

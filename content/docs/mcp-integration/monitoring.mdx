@@ -1,0 +1,35 @@
+---
+title: Monitoring & Alerting
+description: Keep MCP reliable and diagnose issues quickly
+---
+
+Task Genius MCP runs locally and is designed to be lightweight, but you still want basic observability when integrating with external tools.
+
+## What to Monitor
+
+- **Server status**: enabled/disabled, listening port
+- **Auth failures**: wrong token/app id, expired/rotated credentials
+- **Port conflicts**: another process already using the configured port
+- **Latency spikes**: large vault operations or heavy indexing rebuilds
+
+## Practical Checks
+
+### Verify Configuration
+
+In Task Genius settings:
+
+- Confirm the MCP server is enabled
+- Confirm the port (default `7777`)
+- Copy credentials again to avoid formatting mistakes
+
+### Watch the Console
+
+Open Developer Tools (`Ctrl/Cmd + Shift + I`) and check the console for MCP-related errors when requests fail.
+
+## Operational Tips
+
+- Disable MCP when you are not using external clients.
+- Rotate credentials if you suspect leakage.
+- Prefer local-only access; avoid exposing the MCP port to the network.
+
+For security controls and threat model, see [Security](/docs/mcp-integration/security).

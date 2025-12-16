@@ -3,10 +3,13 @@
   "description": "Setup guides for different AI clients",
   "icon": "Monitor",
   "pages": [
+    "index",
+    "---Guides---",
     "cursor",
     "claude-desktop",
     "claude-code",
     "vscode",
+    "---Other---",
     "windsurf",
     "zed",
     "custom"

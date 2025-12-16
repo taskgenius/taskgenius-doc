@@ -1,0 +1,18 @@
+---
+title: Windsurf Configuration
+description: Connect Windsurf to Task Genius MCP
+---
+
+If Windsurf supports MCP servers in your version, you can add Task Genius as an HTTP MCP server using the same connection details as other clients.
+
+## Configuration Values
+
+- **URL**: `http://127.0.0.1:7777/mcp`
+- **Header**: `Authorization: Bearer <TOKEN>+<APP_ID>`
+
+## Next Steps
+
+- Verify the client can list Task Genius tools
+- Start with a read-only query before using write operations
+
+If your Windsurf build does not expose MCP settings, use [Custom Client Configuration](/docs/mcp-integration/clients/custom) as the reference and map the fields to Windsurf's UI/config format.

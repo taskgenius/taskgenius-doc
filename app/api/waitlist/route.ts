@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+﻿import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseClient } from "@/lib/supabase";
 import { z } from "zod";
 
 /**
- * 邮箱验证 Schema
- * 使用 Zod 进行严格的类型和格式验证
+ * 閭楠岃瘉 Schema
+ * 浣跨敤 Zod 杩涜涓ユ牸鐨勭被鍨嬪拰鏍煎紡楠岃瘉
  */
 const emailSchema = z.object({
   email: z
@@ -18,17 +18,19 @@ const emailSchema = z.object({
 
 /**
  * POST /api/waitlist
- * 提交邮箱到等候列表
+ * 鎻愪氦閭鍒扮瓑鍊欏垪琛?
  *
- * @param request - Next.js Request 对象
- * @returns JSON 响应，包含成功/错误信息
+ * @param request - Next.js Request 瀵硅薄
+ * @returns JSON 鍝嶅簲锛屽寘鍚垚鍔?閿欒淇℃伅
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. 解析请求体
+    const supabase = getSupabaseClient();
+
+    // 1. 瑙ｆ瀽璇锋眰浣?
     const body = await request.json();
 
-    // 2. 验证邮箱格式（客户端 + 服务端双重验证）
+    // 2. 楠岃瘉閭鏍煎紡锛堝鎴风 + 鏈嶅姟绔弻閲嶉獙璇侊級
     const validation = emailSchema.safeParse(body);
 
     if (!validation.success) {
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const { email } = validation.data;
 
-    // 3. 检查邮箱是否已存在（防重复）
+    // 3. 妫€鏌ラ偖绠辨槸鍚﹀凡瀛樺湪锛堥槻閲嶅锛?
     const { data: existingEntry, error: checkError } = await supabase
       .from("waitlist")
       .select("email")
@@ -65,7 +67,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 4. 插入新邮箱到数据库
+    // 4. 鎻掑叆鏂伴偖绠卞埌鏁版嵁搴?
     const { data, error: insertError } = await supabase
       .from("waitlist")
       .insert({
@@ -82,7 +84,7 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       console.error("Database insert error:", insertError);
 
-      // 处理唯一约束冲突（并发请求场景）
+      // 澶勭悊鍞竴绾︽潫鍐茬獊锛堝苟鍙戣姹傚満鏅級
       if (insertError.code === "23505") {
         return NextResponse.json(
           { error: "Email already registered" },
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. 成功响应
+    // 5. 鎴愬姛鍝嶅簲
     return NextResponse.json(
       {
         success: true,
@@ -119,10 +121,12 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/waitlist
- * 获取等候列表统计信息（可选功能）
+ * 鑾峰彇绛夊€欏垪琛ㄧ粺璁′俊鎭紙鍙€夊姛鑳斤級
  */
 export async function GET() {
   try {
+    const supabase = getSupabaseClient();
+
     const { count, error } = await supabase
       .from("waitlist")
       .select("*", { count: "exact", head: true });

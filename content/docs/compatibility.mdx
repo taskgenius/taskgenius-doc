@@ -2,21 +2,159 @@
 title: "Compatibility"
 ---
 
+import { DeepLinkButton, DeepLinkFallback } from "@/components/DeepLinkButton";
+
 ## Tasks Plugin
 
-When using Task Genius alongside the popular Tasks plugin, be aware of potential conflicts, particularly with the **status cycle** feature.
+When using Task Genius alongside the popular [Tasks plugin](https://github.com/obsidian-tasks-group/obsidian-tasks), be aware of potential conflicts. Both plugins manage task statuses and dates, which can lead to unexpected behavior if not configured properly.
 
-Task Genius offers highly customizable task status markers and cycling behaviors (as detailed in [Task Status & Cycling](/docs/task-status)). The Tasks plugin also has its own system for managing and cycling through task statuses.
+### Potential Conflicts
 
-If both plugins attempt to manage or cycle task statuses, you may experience:
-- Unpredictable status changes when clicking on a task.
-- Conflicts in how different status markers are interpreted or displayed.
-- Issues with commands related to task status cycling from either plugin.
+#### 1. Status Cycling Conflicts
 
-**Recommendation:**
+Both plugins can cycle task statuses when you click on a checkbox:
 
-To avoid conflicts, it is generally recommended to **choose one plugin** to handle task status cycling and configure the other plugin to not interfere.
-- If you prefer Task Genius's status cycling, ensure that similar cycling features in the Tasks plugin are disabled or configured not to overlap with Task Genius's markers.
-- If you prefer the Tasks plugin's cycling, you might need to simplify or disable custom cycling in Task Genius to prevent clashes, potentially by not using the "Enable task status switcher" setting or by ensuring the defined cycles(You can disable all cycles in Task Genius) do not conflict with Tasks plugin's expected markers.
+| Feature | Task Genius | Tasks Plugin |
+|---------|-------------|--------------|
+| Click-to-cycle | "Enable click-to-cycle" setting | Built-in behavior |
+| Custom statuses | Full customization via Status Cycles | Status types configuration |
+| Cycle order | User-defined sequences | Predefined sequences |
 
-Carefully review the settings for both Task Genius's "Task Status Switcher" and the Tasks plugin's status configuration to ensure they work harmoniously if you intend to use features from both.
+**Symptoms of conflict:**
+- Clicking a checkbox changes status unexpectedly
+- Status cycles in wrong order
+- Double status changes on single click
+
+#### 2. Date Management Conflicts
+
+Both plugins can automatically add dates to tasks:
+
+| Feature | Task Genius | Tasks Plugin |
+|---------|-------------|--------------|
+| Completion date | "Automatic Date Management" | Auto-suggest/edit |
+| Start date | On "In Progress" status | Manual or query-based |
+| Format | Emoji (✅) or Dataview | Emoji format |
+
+**Symptoms of conflict:**
+- Duplicate dates appearing on tasks
+- Dates in wrong format
+- Dates being removed unexpectedly
+
+### Recommended Configurations
+
+Choose **ONE** of the following setups:
+
+---
+
+### Option A: Use Task Genius for Status Cycling
+
+Best if you want **custom multi-step workflows** (e.g., `[ ] → [/] → [?] → [x]`).
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=task-status">
+  Open Task Status Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+**Task Genius Settings:**
+1. Enable "Click-to-cycle" ✅
+2. Enable "Custom status workflows" ✅
+3. Configure your status cycles as needed
+
+**Tasks Plugin Settings:**
+1. Go to Tasks plugin settings
+2. Under "Status Settings", set status types to match Task Genius's 5 core categories
+3. Disable any conflicting click handlers if available
+4. Consider using Tasks plugin only for querying, not status management
+
+---
+
+### Option B: Use Tasks Plugin for Status Cycling
+
+Best if you rely heavily on **Tasks plugin queries** and want consistent behavior.
+
+**Task Genius Settings:**
+1. Disable "Click-to-cycle" ❌
+2. Disable "Custom status workflows" ❌
+3. Keep "Core Status Categories" configured to match Tasks plugin for accurate progress bars
+
+**Tasks Plugin Settings:**
+1. Use Tasks plugin's native status cycling
+2. Configure status types as needed
+
+---
+
+### Option C: Use Both (Advanced)
+
+For advanced users who want features from both plugins.
+
+**Key principle:** Ensure status markers don't overlap between plugins.
+
+**Setup:**
+1. In Task Genius, define cycles for specific workflows (e.g., project management)
+2. In Tasks plugin, configure different status types
+3. Use Task Genius cycles only in specific notes/projects
+4. Use Tasks plugin for general task management
+
+**Example separation:**
+- Task Genius: `[P]` (Project), `[R]` (Review), `[B]` (Blocked)
+- Tasks plugin: `[ ]`, `[x]`, `[-]`, `[/]`
+
+---
+
+### Date Management Compatibility
+
+If using automatic dates from both plugins:
+
+1. **Choose one plugin for date management**
+   - Task Genius: Settings → Task Status → "Automatic Date Management"
+   - Tasks plugin: Auto-suggest features
+
+2. **Use consistent date format**
+   - Both plugins support emoji format (✅ for completion)
+   - Task Genius also supports Dataview format
+
+3. **Disable duplicate features**
+   - If using Task Genius dates, disable Tasks plugin's auto-date features
+   - If using Tasks plugin dates, disable Task Genius's "Automatic Date Management"
+
+---
+
+### Quick Compatibility Checklist
+
+| Setting | Task Genius Only | Tasks Only | Both (Advanced) |
+|---------|-----------------|------------|-----------------|
+| TG: Click-to-cycle | ✅ On | ❌ Off | ✅ On (custom markers) |
+| TG: Custom workflows | ✅ On | ❌ Off | ✅ On (non-overlapping) |
+| TG: Auto dates | ✅ On | ❌ Off | Choose one |
+| Tasks: Status cycling | ❌ Minimal | ✅ On | ✅ On (different markers) |
+| Tasks: Auto dates | ❌ Off | ✅ On | Choose one |
+
+---
+
+### Troubleshooting
+
+#### Status changes unexpectedly on click
+
+1. Check if both plugins have click handlers enabled
+2. Disable one plugin's cycling feature
+3. Verify status markers don't overlap
+
+#### Dates appearing twice
+
+1. Check both plugins' date settings
+2. Disable automatic dates in one plugin
+3. Verify date format consistency
+
+#### Progress bars showing wrong counts
+
+1. Ensure Task Genius's "Core Status Categories" match your actual markers
+2. Check "Count unknown symbols as" setting
+3. Verify excluded markers in "Progress Calculation" settings
+
+---
+
+### Further Reading
+
+- [Task Status & Cycling](/docs/task-status) - Full guide to Task Genius status system
+- [Automatic Date Management](/docs/append-date) - Date automation in Task Genius
+- [Tasks Plugin Documentation](https://publish.obsidian.md/tasks/) - Official Tasks plugin docs

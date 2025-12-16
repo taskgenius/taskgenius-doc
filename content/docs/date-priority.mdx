@@ -1,47 +1,212 @@
 ---
-title: Date & Priority management
+title: Date & Priority Picker
 ---
 
-Task Genius provides intuitive ways to add and manage due dates and priorities for your tasks directly within Obsidian notes.
+import { VersionCallout } from "@/components/VersionCallout";
+
+Task Genius provides intuitive date and priority pickers to quickly add and manage task metadata directly within your Obsidian notes.
+
+<VersionCallout version="7.0.0" />
+
+## Overview
+
+The date and priority pickers allow you to:
+
+- **Date Picker**: Click on date emojis/markers in Live Preview mode to open a calendar picker
+- **Priority Picker**: Click on priority emojis to select from predefined priority levels
+- **Keyboard Shortcuts**: Quickly set priorities using configurable hotkeys
+
+## Getting Started
 
 <DeepLinkButton href="obsidian://task-genius/settings?tab=date-priority">
   Open Date & Priority Settings
 </DeepLinkButton>
 <DeepLinkFallback />
 
-## Dates picker
+## Date Picker
 
-Assign due dates using the calendar emoji (`📅`) followed by a date in `YYYY-MM-DD` format.
+### Enabling the Date Picker
 
+Toggle **Enable date picker** in settings to activate the interactive date picker functionality.
+
+**Default:** `false`
+
+### Supported Date Formats
+
+Task Genius recognizes multiple date emoji markers:
+
+| Emoji | Meaning | Example |
+|-------|---------|---------|
+| 📅 | Due date | `- [ ] Task 📅 2025-01-20` |
+| 🛫 | Start date | `- [ ] Task 🛫 2025-01-15` |
+| ⏳ | Scheduled date | `- [ ] Task ⏳ 2025-01-18` |
+| ✅ | Completion date | `- [x] Task ✅ 2025-01-19` |
+| ➕ | Created date | `- [ ] Task ➕ 2025-01-10` |
+
+### Using the Date Picker
+
+1. **In Live Preview mode**, click on any date emoji (📅, 🛫, ⏳, etc.) or the date text itself
+2. A calendar picker will appear
+3. Select the desired date
+4. The date will be updated in your task
+
+**Example:**
 ```markdown
-- [ ] Submit report 📅 2023-12-25
+- [ ] Submit report 📅 2025-01-25
 ```
 
-- **Calendar Picker**: Click the calendar icon and also the date text (`📅 2023-12-25`) in Live Preview mode to open a date picker menu and easily select or modify the due date.
-  - **Configurable**: You can customize what kind of the emoji is used as the calendar icon (support start date emoji, scheduled date emoji, due date emoji, etc.) in the settings.
+Click on `📅 2025-01-25` to open the date picker and modify the date.
 
-## Priority
+### Dataview Format Support
 
-Assign priorities using specific emoji or the `priority` dataview-style inline field (`priority::`).
-
-Common emoji used (configurable in settings):
-
-- 🔺 Highest
-- ⏫ High
-- 🔼 Medium
-- 🔽 Low
-- ⏬ Lowest
-
-Alternatively, use bracketed priorities like `[#A]`, `[#B]`, `[#C]`.
+Task Genius also supports Dataview-style inline fields:
 
 ```markdown
-- [ ] Urgent Task 🔺
-- [ ] High priority task ⏫
-- [ ] Normal task
-- [ ] Low priority task [priority:: low]
-- [ ] Another way [#B]
+- [ ] Task with due date [due:: 2025-01-20]
+- [ ] Task with start date [start:: 2025-01-15]
+- [ ] Task with scheduled date [scheduled:: 2025-01-18]
 ```
 
-- **Priority Selector**: In Live Preview mode, click the priority icon (if present) to open a dropdown menu for quick selection.
-- **Context Menu**: Right-click on a task line and use the `Task Genius: Set priority` submenu.
-- **Commands**: Use commands like `Task Genius: Set priority A`, `Task Genius: Set priority B`, `Task Genius: Remove priority` via the command palette.
+## Priority Picker
+
+### Enabling the Priority Picker
+
+Toggle **Enable priority picker** in settings to activate interactive priority selection.
+
+**Default:** `false`
+
+### Priority Levels
+
+Task Genius recognizes these priority markers:
+
+| Emoji | Level | Keyboard Shortcut Setting |
+|-------|-------|---------------------------|
+| 🔺 | Highest | Set priority to Highest |
+| ⏫ | High | Set priority to High |
+| 🔼 | Medium | Set priority to Medium |
+| 🔽 | Low | Set priority to Low |
+| ⏬ | Lowest | Set priority to Lowest |
+
+### Alternative Priority Formats
+
+**Bracketed priorities:**
+```markdown
+- [ ] Urgent task [#A]
+- [ ] High priority [#B]
+- [ ] Normal priority [#C]
+```
+
+**Dataview format:**
+```markdown
+- [ ] Task [priority:: high]
+- [ ] Task [priority:: 1]
+```
+
+### Using the Priority Picker
+
+1. **In Live Preview mode**, click on the priority marker in a task line
+2. A dropdown menu will appear with all priority options
+3. Select the desired priority level
+4. The priority will be updated in your task
+
+### Context Menu
+
+Right-click on any task line to access priority options:
+
+- **Task Genius: Set priority** submenu with all priority levels
+- Quick access to add or change priorities
+
+### Commands
+
+Use the command palette (`Ctrl/Cmd + P`) for priority management:
+
+| Command | Description |
+|---------|-------------|
+| `Task Genius: Set priority Highest priority` | Set task to highest priority |
+| `Task Genius: Set priority High priority` | Set task to high priority |
+| `Task Genius: Set priority Medium priority` | Set task to medium priority |
+| `Task Genius: Set priority Low priority` | Set task to low priority |
+| `Task Genius: Set priority Lowest priority` | Set task to lowest priority |
+| `Task Genius: Remove priority` | Remove priority from task |
+
+### Keyboard Shortcuts
+
+<VersionCallout version="8.0.0" />
+
+Toggle **Enable priority keyboard shortcuts** to enable hotkey-based priority setting.
+
+**Default:** `false`
+
+When enabled, you can assign custom hotkeys to each priority command in Obsidian's Hotkeys settings.
+
+## Settings Reference
+
+### Date Picker Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| Enable date picker | boolean | `false` | Enable interactive date picker in Live Preview |
+
+### Priority Picker Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| Enable priority picker | boolean | `false` | Enable interactive priority selector in Live Preview |
+| Enable priority keyboard shortcuts | boolean | `false` | Enable hotkey commands for setting priorities |
+
+## Best Practices
+
+### Consistent Date Format
+
+Use consistent date formatting across your vault:
+
+```markdown
+# Recommended: Tasks plugin emoji format
+- [ ] Task 📅 2025-01-20
+
+# Alternative: Dataview format
+- [ ] Task [due:: 2025-01-20]
+```
+
+### Priority Workflow
+
+1. Use **Highest** (🔺) sparingly for truly urgent items
+2. Use **High** (⏫) for important tasks
+3. Leave most tasks without priority (implicit normal)
+4. Use **Low/Lowest** for nice-to-have items
+
+### Combining Date and Priority
+
+```markdown
+- [ ] Critical deadline 🔺 📅 2025-01-15
+- [ ] Important project ⏫ 🛫 2025-01-10 📅 2025-01-30
+- [ ] Backlog item ⏬ 📅 2025-03-01
+```
+
+## Troubleshooting
+
+### Date Picker Not Appearing
+
+- Ensure **Enable date picker** is toggled ON
+- Make sure you're in **Live Preview mode** (not Source mode)
+- Click directly on the emoji or date text
+- Try reloading Obsidian
+
+### Priority Not Updating
+
+- Ensure **Enable priority picker** is toggled ON
+- Check if you're clicking on the priority emoji in Live Preview
+- Use the command palette as an alternative
+
+### Keyboard Shortcuts Not Working
+
+- Ensure **Enable priority keyboard shortcuts** is toggled ON
+- Check Obsidian's Hotkeys settings for conflicts
+- Assign hotkeys to the priority commands manually
+
+## Related Features
+
+- [Task Status](/docs/task-status): Task status markers and cycling
+- [Auto Date Management](/docs/append-date): Automatically add dates on status changes
+- [Time Parsing](/docs/time-parsing): Natural language date and time parsing
+- [Task View](/docs/task-view): View and filter tasks by date and priority

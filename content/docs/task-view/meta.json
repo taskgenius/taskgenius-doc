@@ -6,6 +6,7 @@
   "pages": [
     "---Overview---",
     "index",
+    "ui-layer",
     "basic-view-settings",
     "---Configuration---",
     "indexer",

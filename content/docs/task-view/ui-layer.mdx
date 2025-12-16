@@ -1,0 +1,165 @@
+---
+title: UI Layer
+description: Fluent Task Genius View structure, interactions, and key UI components
+---
+
+This page documents the **Fluent UI layer** behind the Task Genius View: how the layout is composed, what each major UI component is responsible for, and how state/interaction flows through the view.
+
+> ℹ️ This is an “implementation-aware” guide. It aims to be accurate to the current code while still describing behavior from a user’s perspective.
+
+## 🧩 Layout At A Glance
+
+The Fluent Task Genius View is composed of three primary regions:
+
+- 🧭 **Sidebar**: navigation + workspace + projects
+- 🧰 **Top Navigation**: search + view modes + quick actions
+- 🗂️ **Main Content**: renders the active view (List / Kanban / Tree / Calendar, etc.)
+
+There are **two layout modes** depending on your Interface settings:
+
+- 🧱 **In-view layout (default)**: Sidebar + Details are rendered inside the Task Genius view.
+- 🧷 **Workspace side leaves mode**: Sidebar and Details are rendered in Obsidian’s left/right side leaves, while the main view focuses on content.
+
+On mobile-sized layouts:
+
+- 📱 The sidebar can behave like a **drawer** (overlay) to preserve screen space.
+
+Related setting: [Interface Settings → Use Workspace Side Leaves](/docs/interface-settings).
+
+## 🧭 Sidebar — `FluentSidebar`
+
+Source: `src/components/features/fluent/components/FluentSidebar.ts`
+
+The sidebar is responsible for **primary navigation** and **workspace-scoped UI organization**.
+
+### 🗺️ Workspace Switching
+
+- 🧩 **Workspace selector** lets you switch between workspaces (each workspace can have its own view visibility, ordering, and filters).
+- 🔄 Workspace lifecycle events (create/delete/switch) refresh the navigation and project list so the UI stays consistent.
+
+Related concept: [Workspace](/docs/workspace).
+
+### 🧭 Navigation (Views)
+
+The sidebar’s view navigation is split into two conceptual groups:
+
+- ⭐ **System views (built-in)**: `Inbox`, `Today`, `Upcoming`, `Flagged` (always treated as “top region”).
+- 🧱 **Other/custom views**: user-defined or additional views (typically in the “bottom region”).
+
+Common interactions:
+
+- 🖱️ **Click** a view to navigate.
+- ↕️ **Drag & drop** to reorder views (where enabled).
+- ⋯ **Context menu** on a view to manage it (e.g., edit, copy, hide from sidebar; delete for custom views).
+- 👁️ **Visibility** can be workspace-aware (a view can be hidden in one workspace but visible in another).
+
+If you have many “Other Views”, the sidebar can automatically group overflow items:
+[Interface Settings → Max Other Views Before Overflow](/docs/interface-settings).
+
+### 🗂️ Projects
+
+- 🗂️ A dedicated **project list** lives in the sidebar to support project-centric navigation.
+- 🔒 The sidebar can temporarily **disable project interaction** when the main content shows a “projects overview” state, preventing conflicting navigation.
+
+## 🧰 Top Navigation — `FluentTopNavigation`
+
+Source: `src/components/features/fluent/components/FluentTopNavigation.ts`
+
+The top navigation provides **fast, mode-centric interactions** that apply to the currently active view.
+
+### 🔍 Search
+
+- 🔎 A search box updates the active view by applying a query filter.
+- ⌨️ It’s designed for “type-to-filter” workflows where you keep your hands on the keyboard.
+
+### 🧭 View Modes
+
+- 🧱 View Modes are the “how”: List / Kanban / Tree / Calendar.
+- 📌 Available modes can vary per view; the UI updates the mode buttons based on the active view.
+- 💾 Mode preference is remembered per view/workspace (see [View Modes](/docs/view-modes)).
+
+### 🔔 Overdue Notifications
+
+- 🔔 The nav can display an **overdue counter**.
+- ✅ Completed/abandoned tasks are excluded.
+- 📅 A task is counted as overdue when its **Due** or **Scheduled** date is earlier than today.
+
+### 🧱 Kanban Cycle Selector
+
+For Kanban workflows with multiple “status cycles”:
+
+- 🧩 A **cycle selector** can appear to switch which status-cycle is used for grouping and transitions.
+- ⚙️ A shortcut is provided to open the status-cycle settings.
+
+### 🧩 Extensibility (Custom Buttons)
+
+The top navigation supports registering custom buttons:
+
+- ➕ Add a button with an icon + tooltip + click handler.
+- 🧹 Unregister or clear custom buttons (useful for feature modules that appear/disappear).
+
+### ⚙️ Quick Actions
+
+Depending on the view and configuration, the top navigation also acts as the home for “quick access” actions such as opening Task Genius settings.
+
+## 🧠 View Coordinator — `FluentTaskView`
+
+Source: `src/pages/FluentTaskView.ts`
+
+`FluentTaskView` is the **central coordinator** and the **single source of truth** for UI state. It owns:
+
+- 🗃️ Data state: `tasks`, `filteredTasks`, loading/error flags
+- 🧭 View state: active view id, search query, filter state, selected project, view mode
+- 🎯 Selection state: currently selected task + bulk-selection mode coordination
+
+### 🧱 DOM Structure (CSS-critical)
+
+The view builds a stable DOM structure (class names are intentionally consistent for CSS):
+
+- `tg-fluent-layout`
+  - `tg-fluent-sidebar-container`
+  - `tg-fluent-main-container`
+    - `tg-fluent-top-nav`
+    - `tg-fluent-content-wrapper`
+      - `tg-fluent-content`
+
+### 🧰 “Managers” Pattern (KISS: stateful coordinator + stateless executors)
+
+The Fluent UI uses manager-style helpers to keep responsibilities focused:
+
+- 🗃️ Data loading/filtering
+- 🧭 Layout composition (sidebar/details placement, mobile drawer behavior)
+- 🧩 Component switching (render List/Kanban/Calendar/etc.)
+- 🫳 Gestures / mobile ergonomics
+- 💾 Workspace-scoped persistence (filters/layout)
+- 🎛️ Action handling (search, navigation, task actions)
+- ✅ Multi-selection + bulk operations coordination
+
+### 🧯 Error / Empty / Loading States
+
+`FluentTaskView` explicitly switches UI states:
+
+- ⏳ Loading: render loading state via the component manager
+- 🧯 Error: render a structured error state with context and a retry action
+- 🗃️ Empty: render an empty state when there are no tasks to show
+
+## 🔁 Event & State Flow
+
+High-level flow (simplified):
+
+```mermaid
+flowchart LR
+  A[Dataflow: index updates] -->|Events| B[FluentTaskView]
+  B --> C[Apply filters & resolve view mode]
+  C --> D[Layout updates (sidebar active, counts)]
+  C --> E[Component switch/render]
+  E --> F[User interactions: search/mode/filter/task actions]
+  F --> B
+```
+
+## 🔗 Related Docs
+
+- [Task View Overview](/docs/task-view)
+- [View Modes](/docs/view-modes)
+- [Interface Settings](/docs/interface-settings)
+- [Task Indexing](/docs/task-view/indexer)

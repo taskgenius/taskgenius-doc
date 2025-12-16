@@ -1,0 +1,324 @@
+---
+title: Calendar View
+description: Create and manage custom calendar views with flexible display options
+---
+
+import { VersionCallout } from "@/components/VersionCallout";
+
+# Calendar View
+
+<VersionCallout version="9.10.0" />
+
+Calendar View allows you to visualize your tasks in various calendar formats. Task Genius provides built-in calendar templates and lets you create custom calendar views with specific configurations for different use cases.
+
+## Overview
+
+The Calendar View system offers:
+
+- **Multiple view types**: Month, Week, Day, Agenda, and Year views
+- **Custom configurations**: Create personalized calendar views based on templates
+- **Flexible filtering**: Hide weekends, show only working hours, and more
+- **Drag and drop management**: Reorder your custom views easily
+
+## Getting Started
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=calendar-view">
+  Open Calendar View Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+1. Open Task Genius settings
+2. Navigate to the **Calendar View** settings tab
+3. Choose a built-in template or create a custom view
+
+## Built-in View Templates
+
+Task Genius provides five built-in calendar templates that you can use as starting points:
+
+### Month View
+
+Display tasks in a traditional monthly calendar grid.
+
+| Feature | Description |
+|---------|-------------|
+| **Icon** | `calendar` |
+| **Best for** | Monthly planning, seeing task distribution across weeks |
+| **Shows** | Full month with daily task indicators |
+
+### Week View
+
+Display tasks in a weekly time grid with hourly slots.
+
+| Feature | Description |
+|---------|-------------|
+| **Icon** | `calendar-range` |
+| **Best for** | Weekly scheduling, time-blocking |
+| **Shows** | 7 days with hourly time slots |
+
+### Day View
+
+Display tasks for a single day with detailed time slots.
+
+| Feature | Description |
+|---------|-------------|
+| **Icon** | `calendar-days` |
+| **Best for** | Daily planning, detailed scheduling |
+| **Shows** | Single day with granular time slots |
+
+### Agenda View
+
+Display upcoming tasks in a list format grouped by day.
+
+| Feature | Description |
+|---------|-------------|
+| **Icon** | `list` |
+| **Best for** | Quick overview, upcoming deadlines |
+| **Shows** | Chronological list of tasks grouped by date |
+
+### Year View
+
+Display a full year with 12 mini-month calendars.
+
+| Feature | Description |
+|---------|-------------|
+| **Icon** | `calendar-clock` |
+| **Best for** | Long-term planning, annual overview |
+| **Shows** | All 12 months in a compact grid |
+
+## Creating Custom Calendar Views
+
+Custom views let you configure specific display settings based on your workflow needs.
+
+### Step 1: Choose a Template
+
+1. In the Calendar View settings, find the **Built-in View Templates** section
+2. Click **Create Custom View** on any template card
+3. A configuration modal will open
+
+### Step 2: Configure Basic Settings
+
+| Setting | Description |
+|---------|-------------|
+| **Name** | Display name for your custom view |
+| **Icon** | Choose a [Lucide icon](https://lucide.dev/icons/) |
+| **Base View Type** | The template type (Month, Week, Day, Agenda, Year) |
+| **Enabled** | Toggle visibility of this view |
+
+### Step 3: Configure Calendar Options
+
+#### First Day of Week
+
+Choose which day starts your week:
+
+| Option | Description |
+|--------|-------------|
+| **System Default** | Follow your system/locale settings |
+| **Sunday** | Traditional week start |
+| **Monday** | ISO week start (common in Europe) |
+| **Saturday** | Weekend-first layout |
+
+#### Week Numbers
+
+| Setting | Description |
+|---------|-------------|
+| **Show Week Numbers** | Display ISO week numbers in the calendar |
+
+#### Event Counts
+
+| Setting | Description |
+|---------|-------------|
+| **Show Event Counts** | Display task count badges on calendar days |
+
+### Step 4: Configure Day Filters
+
+Control which days appear in your calendar:
+
+| Filter Type | Description |
+|-------------|-------------|
+| **None** | Show all days (default) |
+| **Hide Weekends** | Remove Saturday and Sunday from view |
+| **Hide Weekdays** | Show only Saturday and Sunday |
+| **Custom Days** | Select specific days to hide |
+
+**Use cases:**
+
+- **Work calendar**: Hide weekends to focus on workdays
+- **Weekend planning**: Hide weekdays to plan leisure activities
+- **Part-time schedule**: Hide specific days you don't work
+
+### Step 5: Configure Time Filters
+
+For Week and Day views, control the visible time range:
+
+| Setting | Description |
+|---------|-------------|
+| **Enable Time Filter** | Toggle time range filtering |
+| **Filter Type** | Working hours, morning, afternoon, evening, or custom |
+| **Start Hour** | First hour to display (0-23) |
+| **End Hour** | Last hour to display (0-23) |
+
+**Preset time ranges:**
+
+| Preset | Hours |
+|--------|-------|
+| **Working Hours** | 9:00 - 18:00 |
+| **Morning** | 6:00 - 12:00 |
+| **Afternoon** | 12:00 - 18:00 |
+| **Evening** | 18:00 - 23:00 |
+| **Custom** | Define your own range |
+
+## Managing Custom Views
+
+### View List
+
+Your custom calendar views appear in the **Custom Calendar Views** section with:
+
+- **Drag handle**: Reorder views by dragging
+- **View icon**: Visual identifier
+- **View name**: Display name
+- **Base type indicator**: Shows which template it's based on
+- **Configuration summary**: Quick overview of active filters
+
+### Actions
+
+Each custom view has action buttons:
+
+| Action | Icon | Description |
+|--------|------|-------------|
+| **Toggle Visibility** | `eye` / `eye-off` | Show or hide the view |
+| **Edit** | `pencil` | Open configuration modal |
+| **Duplicate** | `copy` | Create a copy of this view |
+| **Delete** | `trash` | Remove the view permanently |
+
+### Reordering Views
+
+1. Click and hold the drag handle (grip icon) on the left
+2. Drag the view to your desired position
+3. Release to save the new order
+
+## Example Configurations
+
+### Work Week View
+
+A focused work calendar:
+
+1. **Base**: Week View
+2. **Name**: "Work Week"
+3. **Day Filter**: Hide Weekends
+4. **Time Filter**: Working Hours (9:00 - 18:00)
+5. **First Day**: Monday
+
+**Result**: Shows only Monday-Friday, 9 AM to 6 PM
+
+### Weekend Planning View
+
+For personal weekend activities:
+
+1. **Base**: Week View
+2. **Name**: "Weekend"
+3. **Day Filter**: Hide Weekdays
+4. **Time Filter**: Disabled (show all hours)
+5. **First Day**: Saturday
+
+**Result**: Shows only Saturday and Sunday, full day
+
+### Morning Routine View
+
+For tracking morning tasks:
+
+1. **Base**: Day View
+2. **Name**: "Morning Routine"
+3. **Day Filter**: None
+4. **Time Filter**: Custom (5:00 - 12:00)
+
+**Result**: Single day view focused on morning hours
+
+### Annual Overview
+
+For long-term planning:
+
+1. **Base**: Year View
+2. **Name**: "Yearly Goals"
+3. **Show Event Counts**: Enabled
+
+**Result**: Full year overview with task density indicators
+
+## Configuration Summary
+
+When viewing your custom calendars, a summary line shows active configurations:
+
+| Indicator | Meaning |
+|-----------|---------|
+| **No weekends** | Weekends are hidden |
+| **Weekends only** | Weekdays are hidden |
+| **Custom days** | Specific days are hidden |
+| **9:00-18:00** | Time range filter is active |
+| **Mon first** | Week starts on Monday |
+| **Sat first** | Week starts on Saturday |
+
+## Tips & Best Practices
+
+### 1. Create Purpose-Specific Views
+
+Instead of one generic calendar, create multiple focused views:
+
+- "Work Calendar" - Weekdays only, working hours
+- "Personal Calendar" - All days, all hours
+- "Meeting Schedule" - Week view with business hours
+
+### 2. Use Descriptive Names
+
+Name views clearly to identify their purpose:
+
+- ✅ "Work Week (Mon-Fri)"
+- ✅ "Morning Focus (5-12)"
+- ❌ "Calendar 1"
+
+### 3. Leverage Duplicates
+
+When creating similar views:
+
+1. Configure one view fully
+2. Duplicate it
+3. Modify only the differences
+
+### 4. Combine with Filters
+
+Calendar views work with Task Genius filters:
+
+- Apply global filters to show specific task types
+- Use view-specific filters for targeted displays
+- Combine calendar views with project or tag filters
+
+## Troubleshooting
+
+### Custom View Not Appearing
+
+1. Check if the view is **enabled** (eye icon should be open)
+2. Verify the view was saved correctly
+3. Refresh the Task Genius view
+
+### Time Filter Not Working
+
+1. Time filters only apply to **Week** and **Day** views
+2. Ensure **Enable Time Filter** is toggled on
+3. Check that start hour is less than end hour
+
+### View Order Not Saving
+
+1. Make sure you complete the drag operation
+2. Check for any error messages in the console
+3. Try restarting Obsidian
+
+### Configuration Changes Not Reflecting
+
+1. Close and reopen the Task Genius view
+2. Check if the save operation completed
+3. Verify settings in the configuration modal
+
+## Related Features
+
+- [Task View](/docs/task-view): Main task management interface
+- [Custom Views](/docs/task-view/custom-view): Create custom task views
+- [ICS Support](/docs/ics-support): Import external calendar events
+- [Basic View Settings](/docs/task-view/basic-view-settings): General view configuration

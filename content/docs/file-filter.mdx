@@ -2,31 +2,248 @@
 title: File Filter
 ---
 
-File Filter controls which files are considered by Task Genius.
+import { VersionCallout } from "@/components/VersionCallout";
+
+File Filter controls which files are considered by Task Genius for task indexing and display.
+
+<VersionCallout version="7.0.0" />
 
 <DeepLinkButton href="obsidian://task-genius/settings?tab=file-filter">
   Open File Filter Settings
 </DeepLinkButton>
 <DeepLinkFallback />
 
-## Include / Exclude
+## Overview
 
-- Include folders/files to explicitly index
-- Exclude folders/files to skip from indexing
-- Patterns should be kept simple and reviewed periodically
+File Filter provides fine-grained control over which files Task Genius processes:
+
+- **Whitelist Mode**: Only include specified files/folders
+- **Blacklist Mode**: Exclude specified files/folders (default)
+- **Scope Controls**: Apply filters to inline tasks, file tasks, or both
+
+## Core Settings
+
+### Enable File Filter
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enabled` | boolean | `false` |
+
+Toggle to enable file filtering. When disabled, all files are processed.
+
+### Filter Mode
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `mode` | `"whitelist"` \| `"blacklist"` | `"blacklist"` | How to interpret filter rules |
+
+**Modes:**
+- **Whitelist**: Only process files/folders that match the rules
+- **Blacklist**: Process all files except those matching the rules
+
+## Filter Rules
+
+### Rule Structure
+
+Each filter rule has the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `type` | `"file"` \| `"folder"` \| `"pattern"` | Type of rule |
+| `path` | string | File path, folder path, or glob pattern |
+| `enabled` | boolean | Whether this rule is active |
+| `scope` | `"both"` \| `"inline"` \| `"file"` | Which task types this rule affects |
+
+### Rule Types
+
+#### File Rules
+
+Match specific files:
+
+```
+Type: file
+Path: Archive/Completed.md
+```
+
+#### Folder Rules
+
+Match all files in a folder (including subfolders):
+
+```
+Type: folder
+Path: Templates/
+```
+
+#### Pattern Rules
+
+Use glob patterns for flexible matching:
+
+```
+Type: pattern
+Path: **/Archive/**
+```
+
+**Common Patterns:**
+- `*.md` - All markdown files in root
+- `**/*.md` - All markdown files anywhere
+- `Daily/**` - All files in Daily folder
+- `**/Archive/**` - Any Archive folder at any level
+
+## Scope Controls
+
+<VersionCallout version="9.0.0" />
+
+Control which types of tasks are affected by file filters:
+
+### Scope Control Settings
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `scopeControls.inlineTasksEnabled` | boolean | `true` | Apply filters to inline tasks (checkbox items) |
+| `scopeControls.fileTasksEnabled` | boolean | `true` | Apply filters to file-level tasks |
+
+### Understanding Scopes
+
+**Inline Tasks:** Traditional checkbox tasks within files:
+```markdown
+- [ ] This is an inline task
+- [x] Another inline task
+```
+
+**File Tasks:** Entire files recognized as tasks based on metadata:
+```yaml
+---
+project: true
+due: 2025-01-20
+---
+# Project File
+This entire file is treated as a task.
+```
+
+### Per-Rule Scope
+
+Each rule can have its own scope setting:
+
+| Scope | Description |
+|-------|-------------|
+| `both` | Affects both inline and file tasks (default) |
+| `inline` | Only affects inline tasks |
+| `file` | Only affects file-level tasks |
+
+**Example Configuration:**
+
+```
+Rule 1:
+  Type: folder
+  Path: Archive/
+  Scope: both      # Exclude all tasks from Archive
+
+Rule 2:
+  Type: folder
+  Path: Projects/
+  Scope: file      # Only exclude file tasks from Projects (inline tasks still indexed)
+```
+
+## Settings Reference
+
+### All File Filter Settings
+
+| Setting | Type | Default |
+|---------|------|---------|
+| `enabled` | boolean | `false` |
+| `mode` | `"whitelist"` \| `"blacklist"` | `"blacklist"` |
+| `rules` | FileFilterRule[] | `[]` |
+| `scopeControls.inlineTasksEnabled` | boolean | `true` |
+| `scopeControls.fileTasksEnabled` | boolean | `true` |
+
+## Common Use Cases
+
+### Exclude Archive Folders
+
+```
+Mode: Blacklist
+Rules:
+  - Type: folder, Path: Archive/
+  - Type: folder, Path: Completed/
+```
+
+### Only Index Specific Folders
+
+```
+Mode: Whitelist
+Rules:
+  - Type: folder, Path: Projects/
+  - Type: folder, Path: Daily/
+  - Type: folder, Path: Tasks/
+```
+
+### Exclude Templates
+
+```
+Mode: Blacklist
+Rules:
+  - Type: folder, Path: Templates/
+  - Type: pattern, Path: **/_template*.md
+```
+
+### Separate Inline and File Task Filtering
+
+```
+Mode: Blacklist
+Rules:
+  - Type: folder, Path: Reference/, Scope: inline
+    (File tasks from Reference still indexed, inline tasks excluded)
+  - Type: folder, Path: Archive/, Scope: both
+    (All tasks from Archive excluded)
+```
 
 ## Interactions With Other Filters
 
-- Global filtering (Tasks/Views) can further restrict items
-- File Filter is evaluated early; downstream filters only see remaining items
+File Filter is evaluated early in the indexing pipeline:
 
-## Performance Notes
+1. **File Filter** → Determines which files are processed
+2. **Task Indexer** → Extracts tasks from remaining files
+3. **View Filters** → Further filters tasks for display
+4. **Popover Filter** → User-applied filters in views
 
-- Broad include/exclude patterns can be expensive on large vaults
-- Prefer narrower folder scopes and explicit includes when possible
+**Important:** File Filter affects the entire index. View-level filters only affect display.
+
+## Performance Considerations
+
+- **Narrow scope**: Use specific paths over broad patterns when possible
+- **Folder rules**: More efficient than pattern matching
+- **Review periodically**: Remove outdated rules to maintain performance
+
+For large vaults (10,000+ files):
+- Prefer folder-based rules
+- Avoid complex glob patterns
+- Use whitelist mode if indexing only specific areas
 
 ## Troubleshooting
 
-- Unexpected items? Re-check both File Filter and view-level filters
-- After changes, force reindex if necessary: “Task Genius: Force reindex all tasks”
+### Tasks Not Appearing
 
+1. Check if File Filter is enabled
+2. Verify the file isn't matched by a blacklist rule
+3. If using whitelist mode, confirm the file matches a rule
+4. Check scope controls match the task type
+
+### Unexpected Tasks Appearing
+
+1. Review all filter rules for gaps
+2. Check if rules are enabled
+3. Verify pattern syntax is correct
+4. Force reindex: `Task Genius: Force reindex all tasks`
+
+### Performance Issues
+
+1. Reduce the number of pattern rules
+2. Use folder rules instead of patterns
+3. Consider whitelist mode for focused indexing
+4. Review scope controls to reduce processing
+
+## Related Features
+
+- [Task View](/docs/task-view): View filtered tasks
+- [Indexer](/docs/task-view/indexer): Configure task indexing
+- [Projects](/docs/project): Project-based task organization

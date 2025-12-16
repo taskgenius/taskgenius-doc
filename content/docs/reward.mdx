@@ -1,28 +1,183 @@
 ---
-title: Reward
+title: Rewards & Gamification
 ---
 
-Task Genius includes a reward system to gamify your productivity and motivate task completion through points, levels, and achievements.
+import { VersionCallout } from "@/components/VersionCallout";
+
+Task Genius includes a unique, lottery-style reward system to gamify your task completion, offering a fun way to celebrate your productivity achievements. Instead of points or levels, you get a chance to win customizable "reward items" when you complete tasks.
+
+<VersionCallout version="8.0.0" />
+
+## Overview
+
+This system simulates a "lucky draw" or "loot drop" experience for your tasks. When enabled, completing tasks can trigger a random reward based on defined probabilities. You can create custom reward items, set their rarity, and even specify conditions under which they can be won.
 
 ## Getting Started
 
 <DeepLinkButton href="obsidian://task-genius/settings?tab=reward">
-  Open Reward Settings
+  Open Rewards Settings
 </DeepLinkButton>
 <DeepLinkFallback />
 
-## Features
+1. Open Task Genius settings.
+2. Navigate to the **Rewards** settings tab.
+3. Toggle **Enable rewards** to activate the system.
+4. Customize your `Reward Items` and `Occurrence Levels` to personalize the experience.
 
-- **Points System**: Earn points for completing tasks
-- **Level Progression**: Advance through levels as you accumulate points
-- **Achievement Tracking**: Unlock achievements for various milestones
-- **Customizable Rewards**: Configure point values and reward criteria
+## Core Concepts
+
+### Reward Items
+
+These are the "prizes" you can win. Each `Reward Item` defines what you get and how likely you are to get it.
+
+| Property | Description |
+|----------|-------------|
+| **ID** | A unique identifier for the reward (auto-generated) |
+| **Name** | The text displayed when you win this reward (e.g., "Drink a cup of good tea") |
+| **Occurrence** | Refers to an `Occurrence Level` (e.g., "common", "rare") which determines the probability |
+| **Inventory** | How many times this reward can be won: `-1` for unlimited, `0` for out of stock, positive number for remaining wins |
+| **Image URL** | (Optional) A URL to an image displayed with the reward |
+| **Condition** | (Optional) A filter string that specifies when this reward can be triggered (e.g., `#project AND #milestone`) |
+
+**Default Reward Items:**
+
+| Reward | Occurrence | Inventory | Condition |
+|--------|------------|-----------|-----------|
+| Drink a cup of good tea | Common | Unlimited (-1) | None |
+| Watch an episode of a favorite series | Rare | 20 | None |
+| Play a game | Legendary | 1 | `#project AND #milestone` |
+| Eat a piece of chocolate | Common | 10 | `#quickwin` |
+
+### Occurrence Levels (Rarity)
+
+These define the rarity categories for your reward items and their corresponding chances of being drawn.
+
+| Property | Description |
+|----------|-------------|
+| **Name** | The display name for the rarity (e.g., "common", "rare", "legendary"). Referenced by Reward Items |
+| **Chance** | The percentage probability (0-100) that a reward from this level will be drawn |
+
+**Default Occurrence Levels:**
+
+| Level | Chance |
+|-------|--------|
+| Common | 70% |
+| Rare | 25% |
+| Legendary | 5% |
+
+<Callout type="note">
+The sum of all `chance` values should ideally be 100% for predictable outcomes.
+</Callout>
+
+### Triggering Rewards
+
+Rewards are triggered upon **task completion**. When a task is marked as completed (`- [x]`), the system:
+
+1. Checks if rewards are enabled globally
+2. Checks if any `Reward Item` has a `condition` that matches the completed task (prioritized if matched)
+3. Performs a probabilistic draw based on `Occurrence Levels` and available `Reward Items`
 
 ## Configuration
 
-Navigate to the Reward settings tab to customize:
+### Enable rewards
 
-- Point values for different task types
-- Level thresholds and progression
-- Achievement criteria
-- Visual indicators and notifications
+A master toggle to turn the entire reward system on or off.
+
+**Default:** `false`
+
+### Reward Items
+
+Manage your reward items in this section:
+
+- Click **Add new reward item** to create a new one
+- Click the pencil icon to edit an existing item
+- Click the trash icon to delete an item
+
+**When adding/editing an item:**
+
+| Field | Description |
+|-------|-------------|
+| Name | Descriptive name for your reward |
+| Occurrence | Select one of your predefined Occurrence Levels |
+| Inventory | How many times this reward can be claimed (`-1` for infinite) |
+| Image URL | (Optional) Link to an image file for visual display |
+| Condition | (Optional) Task filter criteria for eligibility |
+
+### Occurrence Levels
+
+Define rarity categories and their probabilities:
+
+- Click **Add new occurrence level** to create a new rarity tier
+- Set **Name** for a unique identifier (e.g., "Epic", "Unique")
+- Set **Chance** as a percentage value
+
+### Show reward type
+
+Choose how you want to be notified when you win a reward.
+
+| Option | Description |
+|--------|-------------|
+| **Modal** (Default) | A dedicated pop-up window showcasing your reward |
+| **Notice** | A small, temporary notification (less intrusive) |
+
+## Use Cases & Workflows
+
+### Daily Motivation
+
+Set up common rewards like "Take a 5-minute break" or "Listen to a favorite song" to trigger frequently for small task completions.
+
+### Project Milestones
+
+Create rare or legendary rewards (e.g., "Buy a new gadget", "Order takeout") with conditions tied to significant project tasks:
+
+```
+Condition: #project AND #milestone
+```
+
+### Habit Reinforcement
+
+Link specific rewards to habit-related tasks:
+
+```
+Condition: #habit
+```
+
+### Backlog Clearing
+
+Create a reward that triggers when completing tasks from a specific backlog:
+
+```
+Condition: #backlog
+```
+
+## Best Practices
+
+- **Balance Chances**: Adjust `Occurrence Levels` chances so they sum to 100%
+- **Meaningful Rewards**: Make reward items genuinely desirable to keep motivation high
+- **Use Conditions Strategically**: Make certain rewards more special or tied to specific work types
+- **Experiment with Inventory**: Use limited inventory (e.g., 1 or 2) for very special rewards
+- **Visuals Enhance Experience**: Utilize `Image URL` for a more engaging reward experience
+
+## Troubleshooting
+
+### No Rewards Triggering
+
+- Ensure `Enable rewards` is toggled ON
+- Check `Reward Item` inventories (they might be 0)
+- Verify `Occurrence Levels` sum to 100%
+- If using `Condition`, ensure the completed task matches the condition syntax
+
+### Reward Not Displaying Correctly
+
+- Check the `Show reward type` setting
+- If set to `Notice`, it might be easily missed
+
+### Custom Images Not Loading
+
+- Verify `Image URL` is correct and accessible
+- Check if the URL is properly formatted
+
+## Related Features
+
+- [Task Status](/docs/task-status): Configure task completion markers that trigger rewards
+- [Workflows](/docs/workflows): Combine with workflow stages for milestone rewards

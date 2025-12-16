@@ -1,0 +1,38 @@
+---
+title: Custom Client Configuration
+description: Configure any MCP-capable tool to use Task Genius MCP
+---
+
+Use this guide if your AI tool supports MCP but does not have a dedicated Task Genius setup page.
+
+## Prerequisites
+
+1. Enable **MCP Integration** in Task Genius settings
+2. Copy your:
+   - Endpoint URL (`http://127.0.0.1:<port>/mcp`)
+   - Token
+   - App Id
+
+## Minimal Configuration
+
+Most clients need these fields:
+
+- **Name**: `task-genius`
+- **Type / Transport**: HTTP
+- **URL**: `http://127.0.0.1:7777/mcp`
+- **Headers**:
+  - `Authorization: Bearer <TOKEN>+<APP_ID>`
+
+## Validation Checklist
+
+After configuring the server:
+
+1. Confirm the client can **list tools** (you should see Task Genius tools)
+2. Run a read-only operation first (e.g., query incomplete tasks)
+3. Only then enable write actions (create/update/complete)
+
+If you see auth errors, regenerate credentials and re-copy them from settings.
+
+See also:
+- [API Reference](/docs/mcp-integration/api-reference)
+- [Security](/docs/mcp-integration/security)

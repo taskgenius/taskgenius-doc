@@ -11,6 +11,9 @@ import {
   CalendarCheck2,
   ChevronLeft,
   ChevronRight,
+  Move,
+  Maximize2,
+  Palette,
 } from "lucide-react";
 
 The Event View provides a calendar-based interface to visualize and interact with your tasks. It allows you to see tasks plotted on different time scales, navigate through dates, and perform actions directly from the calendar.
@@ -33,9 +36,9 @@ The Event View offers several ways to look at your tasks:
   - <CalendarDays className="inline-block w-5 h-5" /> **Month view:** See tasks laid
     out across a specific month.
   - <CalendarDays className="inline-block w-5 h-5" /> **Week view:** Focus on the
-    current or selected week.
+    current or selected week, with hourly time slots for precise scheduling.
   - <Clock className="inline-block w-5 h-5" /> **Day view:** Examine tasks scheduled
-    for a single day.
+    for a single day with detailed hourly time slots.
   - <ListChecks className="inline-block w-5 h-5" /> **Agenda view:** View upcoming
     tasks in a list format.
 - **Navigation:** Easily move through time:
@@ -44,6 +47,7 @@ The Event View offers several ways to look at your tasks:
     active view.
   - <CalendarCheck2 className="inline-block w-5 h-5" /> **Today:** Quickly jump back
     to the current date.
+  - **Go to date:** Navigate directly to a specific date.
 - **View switching:** Use the buttons or dropdown in the header to select your preferred view (`Year`, `Month`, `Week`, `Day`, `Agenda`). Your last used view is remembered.
 - **Date display:** The header clearly shows the currently displayed date range, adapting its format based on the active view (e.g., "MMMM YYYY" for Month view, "MMM D - D, YYYY" for Week view).
 
@@ -52,26 +56,78 @@ The Event View offers several ways to look at your tasks:
 Tasks are processed and displayed on the calendar as events:
 
 - **Date mapping:** Tasks are primarily placed on the calendar based on their `Due date`. If `Due date` is not available, it will fall back to `Scheduled date` and then `Start date`. Tasks without any of these dates are currently not displayed in the calendar view.
-- **All-day events:** By default, tasks are treated as all-day events on their assigned date.
+
+- **All-day events:** Tasks without specific time information are displayed as all-day events on their assigned date.
+
+- **Time-based events:** Tasks with time information are displayed at their specific time slot in Week and Day views. Supported time formats:
+  - ISO 8601: `YYYY-MM-DD HH:mm` (e.g., `2025-11-20 10:00`)
+  - 24-hour: `14:00`, `09:30`
+  - 12-hour: `2:00pm`, `9:30am`
+
 - **Multi-day events:** If a task has both a `Start date` and a `Due date` that are different, it will be displayed spanning across those days (inclusive).
+
 - **Completed tasks:** Completed tasks are visually distinct (e.g., shown in grey).
+
+- <Palette className="inline-block w-5 h-5" /> **Custom colors:** Events can have custom colors based on priority, tags, or project settings.
 
 ## Interactions
 
 You can interact with the calendar in various ways:
 
-- **Clicking an event:** Selects the corresponding task, will open the task in the detail side panel.
+### Basic Interactions
+
+- **Clicking an event:** Selects the corresponding task and opens it in the detail side panel.
+- **Right-clicking an event:** Opens a context menu with relevant actions for that task.
+- **Completing an event:** A checkbox on the event allows marking the task as complete directly from the calendar.
+
+### Date and Time Slot Interactions
+
 - **Clicking a day (Month/Week view):**
   - Can be configured to open the Quick Capture modal to quickly add a task for that day.
-  - Can switch the view to the Day view for the selected date (Note: This is not yet implemented).
+  - Can switch the view to the Day view for the selected date.
 - **Clicking a month (Year view):** Switches the view to the Month view for the selected month.
-- **Right-clicking an event:** Opens a context menu with relevant actions for that task.
-- **Completing an event:** A mechanism (like a checkbox on the event, depending on the view) allows marking the task as complete directly from the calendar.
+- **Clicking a time slot (Week/Day view):** Click on a specific hour to create a task at that time.
+- **Double-clicking a time slot:** Opens Quick Capture with the selected time pre-filled.
+
+### Drag and Drop
+
+<VersionCallout version="9.0.0" />
+
+<Move className="inline-block w-5 h-5 mr-2" /> **Move events by dragging:**
+
+- **Drag to reschedule:** Click and drag any event to move it to a different date or time. The task's due date (or start/scheduled date) will be automatically updated.
+- **Month view:** Drag events between days to change their date.
+- **Week/Day view:** Drag events vertically to change the time, or horizontally to change the day.
+- **15-minute snap:** Events snap to 15-minute intervals for precise scheduling.
+- **Ghost preview:** A semi-transparent preview shows where the event will be placed while dragging.
+- **Automatic save:** Changes are automatically saved to the task's metadata when you release the event.
+
+### Resize Events
+
+<VersionCallout version="9.0.0" />
+
+<Maximize2 className="inline-block w-5 h-5 mr-2" /> **Resize to change duration:**
+
+- **Resize handles:** Events in Week and Day views display resize handles on the top and bottom edges when hovered.
+- **Drag to extend/shorten:** 
+  - Drag the **top edge** to change the start time
+  - Drag the **bottom edge** to change the end time/due date
+- **Multi-day resize (Month view):** Drag the left or right edge of multi-day events to extend or shorten the span.
+- **15-minute snap:** Resizing snaps to 15-minute intervals.
+- **Automatic updates:** The task's start date and due date are automatically updated based on the new event boundaries.
+
+### Range Selection
+
+<VersionCallout version="9.0.0" />
+
+- **Date range selection (Month view):** Click and drag across multiple days to select a date range. Useful for creating multi-day tasks.
+- **Time range selection (Week/Day view):** Click and drag across time slots to select a time range. Opens Quick Capture with the selected time range pre-filled.
 
 ## Settings
 
 You can read more about the settings in the [Basic view settings](/docs/task-view/basic-view-settings#basic-settings) page.
 
-Event view has a special setting:
+Event view has special settings:
 
-`First day of week`: This setting determines the first day of the week for the calendar. It can be set to any day of the week.
+- **First day of week**: Determines the first day of the week for the calendar. Can be set to any day of the week, or use the locale default.
+- **Hide weekends**: Hide Saturday and Sunday columns in Week and Day views.

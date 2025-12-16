@@ -30,8 +30,8 @@ A lightweight input panel that appears at the bottom of your current editor, ins
 
 **How to Use:**
 1. Focus on any editor in Obsidian
-2. Trigger the command: `Task Genius: Toggle quick capture panel`
-3. **Default Hotkey**: `Alt+C` (customizable in Obsidian's Hotkeys settings)
+2. Trigger the command: `Task Genius: Toggle quick capture panel in editor`
+3. (Optional) Bind a hotkey in Obsidian Settings -> Hotkeys
 4. Type your task or note
 5. Press `Enter` to save to your configured capture file
 
@@ -54,7 +54,7 @@ A lightweight input panel that appears at the bottom of your current editor, ins
 A simple modal window for fast task capture with optional due date.
 
 **How to Use:**
-1. Trigger the command: `Task Genius: Quick capture (Global)`
+1. Trigger the command: `Task Genius: Minimal Quick Capture`
 2. Type your task
 3. Optionally set a due date using the date picker
 4. Press `Enter` or click "Capture" to save
@@ -71,7 +71,7 @@ A simple modal window for fast task capture with optional due date.
 - Single-line input for fast entry
 - Works from anywhere in Obsidian
 
-**Note:** While called "Global", this method still requires Obsidian to be open and focused.
+**Note:** This method requires Obsidian to be open and focused.
 
 ---
 
@@ -82,7 +82,7 @@ A comprehensive capture interface with full metadata support, multi-line input, 
 <VersionCallout version="7.0.0" />
 
 **How to Use:**
-1. Trigger the command: `Task Genius: Task capture with metadata`
+1. Trigger the command: `Task Genius: Quick Capture`
 2. Enter task content in the right-side input area
 3. Configure metadata in the left-side metadata panel
 4. Review the preview at the bottom
@@ -577,12 +577,12 @@ Cannot capture to multiple files simultaneously.
 
 ### Capture Panel Not Appearing
 
-**Issue:** Pressing `Alt+C` does nothing.
+**Issue:** Your hotkey does nothing.
 
 **Solution:**
 - Ensure you're focused on an **editor pane** (not settings, graph, or other views)
-- Check if the hotkey is conflicting with another plugin (Obsidian Settings → Hotkeys)
-- Try triggering via command palette: `Ctrl/Cmd+P` → `Task Genius: Toggle quick capture panel`
+- Check if the hotkey is conflicting with another plugin (Obsidian Settings -> Hotkeys)
+- Try triggering via command palette: `Ctrl/Cmd+P` -> `Task Genius: Toggle quick capture panel in editor`
 
 ---
 
@@ -591,7 +591,7 @@ Cannot capture to multiple files simultaneously.
 **Issue:** Captured tasks disappear or don't appear in the target file.
 
 **Solution:**
-- Verify the target file path in settings (Settings → Quick Capture → Target File)
+- Verify the target file path in settings (Settings -> Quick Capture -> Target File)
 - Check if the file exists or if auto-creation is working
 - Ensure you have write permissions to the target directory
 - Check the console for errors (`Ctrl/Cmd+Shift+I`)

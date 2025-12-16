@@ -180,9 +180,8 @@ The enhanced time parsing significantly improves the Timeline view experience:
 - **Range Separators**: Customize which separators to recognize
 
 ### Parsing Behavior
-- **Midnight Crossing**: How to handle ranges that span midnight
-- **Fallback Strategy**: What to do when time parsing fails
-- **Date Inheritance**: Priority order for time-only expressions
+- **Midnight Crossing**: Ranges that span midnight (e.g., `23:00-07:00`) are automatically handled
+- **Date Inheritance**: Time-only expressions inherit dates from context (current line, file metadata, daily note, or file creation time)
 
 ### Locale Support
 - Locale-aware parsing respects your system settings

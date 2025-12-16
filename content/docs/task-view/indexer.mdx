@@ -1,133 +1,394 @@
 ---
-title: Indexer
+title: Indexer & Task Sources
+description: Configure how Task Genius discovers and indexes tasks from various sources
 ---
 
 import { VersionCallout } from "@/components/VersionCallout";
 
-Task Genius uses the modern **Dataflow Architecture** to efficiently index and manage tasks from multiple sources. This event-driven system provides real-time updates, smart caching, and exceptional performance.
+# Indexer & Task Sources
+
+Task Genius uses an indexing system to discover and manage tasks from multiple sources. In current versions, indexing is a built-in core capability (there is no global on/off switch). This guide covers how to tune task sources, parsing, and performance.
 
 <VersionCallout version="9.0.0" />
 
-## Quick Configuration
+## Overview
 
-<DeepLinkButton href="obsidian://task-genius/settings?tab=index">
-  Open Index Settings
-</DeepLinkButton>
-<DeepLinkFallback />
+The indexer is the core engine that discovers, parses, and manages all tasks in your vault. It supports two primary task sources:
 
-## How it Works
+| Source | Description | Use Case |
+|--------|-------------|----------|
+| **Checkbox Tasks** | Standard `- [ ]` markdown tasks | Traditional task lists in notes |
+| **File Tasks** | Entire files treated as tasks | Project files, action items as files |
 
-The Dataflow architecture orchestrates multiple components for optimal performance:
+<Callout type="info">
+You can enable both sources simultaneously. Checkbox Tasks are enabled by default.
+</Callout>
 
-### Core Components
+---
 
-1. **Orchestrator**: Central coordinator managing all data sources and events
-2. **Data Sources**: 
-   - **ObsidianSource**: Monitors file changes in your vault
-   - **IcsSource**: Integrates external calendar events
-   - **FileSource**: Recognizes entire files as tasks
-3. **Repository**: Maintains the task index and handles queries
-4. **Storage**: Multi-tier caching system for instant startup
-5. **Workers**: Background processing for large operations
+## Source 1: Checkbox Tasks
 
-### Processing Flow
+Checkbox tasks are the traditional markdown task format: `- [ ] Task content`
 
-1. **File Monitoring**: ObsidianSource watches for changes (create, modify, delete)
-2. **Smart Caching**: Repository checks cache validity using content hashing
-3. **Parallel Processing**: 
-   - WorkerOrchestrator distributes parsing to Web Workers
-   - Multiple files processed simultaneously
-   - Automatic fallback to main thread if needed
-4. **Event Broadcasting**: Changes trigger `task-genius:task-cache-updated` events
-5. **View Synchronization**: All views update automatically via event subscription
+### Enabling Checkbox Tasks
 
-### Performance Features
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable checkbox tasks** | Index markdown checkbox tasks | On |
 
-- **Snapshot Loading**: ~100ms startup for 1000+ tasks
-- **Incremental Updates**: Only changed files reprocessed
-- **Content Hashing**: Detect actual changes vs. metadata updates
-- **Loop Prevention**: Sequence-based event tracking prevents infinite updates
-
-<Mermaid chart={`
-graph TB
-    subgraph "Data Sources"
-        A[Vault Files] -- Monitor --> B[ObsidianSource]
-        K[Calendar] -- Sync --> L[IcsSource]
-        M[File Tasks] -- Recognize --> N[FileSource]
-    end
-
-    subgraph "Dataflow Core"
-        B -- FILE_UPDATED --> O[Orchestrator]
-        L -- ICS_EVENTS_UPDATED --> O
-        N -- FILE_TASK_UPDATED --> O
-        O -- Process --> P[Repository]
-        P -- Query --> Q[Storage Cache]
-        Q -- Hit/Miss --> R{Cache Status}
-        R -- Miss --> S[WorkerOrchestrator]
-        S -- Parse --> T[Web Workers]
-        T -- Results --> P
-        R -- Hit --> U[Cached Data]
-        U --> P
-    end
-
-    subgraph "Views"
-        P -- TASK_CACHE_UPDATED --> V[All Views]
-        V --> W[UI Updates]
-    end
-`} />
-
-### Data Sources
-
-The system integrates multiple data sources seamlessly:
-
-- **File Tasks**: Regular tasks from Markdown and Canvas files
-- **ICS Events**: External calendar events displayed as tasks
-- **File-level Tasks**: Entire files treated as tasks based on metadata
-
-### Troubleshooting
-
-If the index seems outdated:
-- Run `Task Genius: Force reindex all tasks` to rebuild completely
-- Use `Task Genius: Refresh task index` for a quick refresh
-- Check console for any error messages
-
-## Managing the Indexer
-
-### Disabling
-Disable indexing in Settings → Task Genius → Index → "Enable Indexing"
-
-### Performance Tuning
-- **Worker Count**: Adjust based on vault size (Settings → Index)
-- **Cache Duration**: Configure persistence time
-- **Batch Size**: Control processing chunks
-
-## Configuration
-
-Customize indexing behavior to match your workflow:
+When disabled, the indexer will skip parsing inline tasks and only process file-based tasks (if enabled).
 
 ### Metadata Format
 
-Choose how to parse task metadata:
+Choose how task metadata is parsed and stored:
 
-- **Tasks**: Emoji format (`🛫 2025-01-01`, `⏫`, `🔁 every week`)
-- **Dataview**: Inline fields (`[due:: 2025-01-01]`, `[priority:: high]`)
+| Format | Syntax | Example |
+|--------|--------|---------|
+| **Dataview** | Inline fields | `- [ ] Task [due:: 2025-01-15] [priority:: high]` |
+| **Tasks** | Emoji format | `- [ ] Task 📅 2025-01-15 🔼` |
 
-The system automatically falls back to the other format when needed.
+<Callout type="tip">
+The parser automatically tries both formats as fallback. Your choice affects the **preferred** format for writing/editing.
+</Callout>
 
-### Daily Notes Integration
+### Custom Date Formats
 
-Automatically assign dates to tasks in daily notes:
+Enable custom date format patterns for parsing non-standard date formats:
 
-- **Enable**: Extract dates from daily note file paths
-- **Path**: Daily notes folder (e.g., `dailies`, `journal/daily`)
-- **Format**: Date pattern in filenames (`yyyy-MM-dd`, `dd-MM-yyyy`)
-- **Assign As**: Target field for extracted date (`due`, `start`, `scheduled`)
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable custom date formats** | Use custom patterns for date parsing | Off |
+| **Custom date formats** | List of date format patterns | - |
+
+**Common format patterns:**
+
+| Pattern | Example |
+|---------|---------|
+| `yyyy-MM-dd` | 2025-08-16 |
+| `dd/MM/yyyy` | 16/08/2025 |
+| `yyyyMMdd` | 20250816 |
+| `yyyyMMdd_HHmmss` | 20250816_144403 |
+| `yyyy年MM月dd日` | 2025年08月16日 |
+
+### Tag Prefix Configuration
+
+Customize the prefixes used for project and context tags:
+
+| Setting | Dataview Format | Tasks Format |
+|---------|-----------------|--------------|
+| **Project tag prefix** | `[project:: myproject]` | `#project/myproject` |
+| **Context tag prefix** | `[context:: home]` | `@home` |
+
+**Default prefixes:**
+- Project: `project` (Dataview) / `project` (Tasks)
+- Context: `context` (Dataview) / `@` (Tasks)
 
 ### Heading Filters
 
-Control which tasks are indexed based on their headings:
+Control which tasks are indexed based on their location under headings:
 
-- **Ignore Under**: Exclude tasks under specific headings (`## Archive`, `## Done`)
-- **Focus On**: Only index tasks under specified headings (`## Project`, `## Inbox`)
+| Setting | Description |
+|---------|-------------|
+| **Ignore all tasks behind heading** | Exclude tasks under specified headings |
+| **Focus all tasks behind heading** | Only include tasks under specified headings |
 
-Enter headings separated by commas. Focus takes priority over ignore.
+**Example usage:**
+- Ignore: `## Archive`, `## Done`, `## Completed`
+- Focus: `## Tasks`, `## Inbox`, `## Action Items`
+
+<Callout type="info">
+Focus takes priority over ignore. If both are configured, only the focus headings are used.
+</Callout>
+
+### Daily Notes Integration
+
+Automatically extract dates from daily note file paths:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Use daily note path as date** | Extract date from daily note filename | Off |
+| **Daily note format** | Date pattern in filenames (e.g., `yyyy-MM-dd`) | - |
+| **Daily note path** | Folder containing daily notes | - |
+| **Use as date type** | Target field: `due`, `start`, or `scheduled` | `due` |
+
+**Example:**
+- Daily note: `Daily/2025-01-15.md`
+- Format: `yyyy-MM-dd`
+- Path: `Daily`
+- Result: Tasks in this file inherit `due: 2025-01-15`
+
+### File Metadata Inheritance
+
+Allow tasks to inherit metadata from their file's frontmatter:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable file metadata inheritance** | Tasks can inherit from frontmatter | Off |
+| **Inherit from frontmatter** | Enable frontmatter inheritance | Off |
+| **Inherit for subtasks** | Subtasks also inherit file metadata | Off |
+
+**Example:**
+
+File frontmatter:
+```yaml
+---
+project: Website
+priority: high
+context: work
+---
+```
+
+Tasks in this file will inherit `project: Website`, `priority: high`, and `context: work` if not explicitly set on the task.
+
+---
+
+## Source 2: File Tasks
+
+File Tasks treat entire files as tasks based on metadata, tags, or file paths. This is useful for:
+- Project-based task management
+- Action items stored as separate files
+- GTD-style "next actions" as individual notes
+
+### Enabling File Tasks
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable file tasks** | Recognize files as tasks | Off |
+
+### Recognition Strategies
+
+Three strategies determine which files become tasks:
+
+#### Strategy 1: Metadata-based Recognition
+
+Files with specific frontmatter fields are recognized as tasks.
+
+| Setting | Description |
+|---------|-------------|
+| **Task Fields** | Frontmatter fields that indicate a file is a task (e.g., `dueDate`, `status`, `priority`) |
+| **Require All Fields** | All specified fields must be present (vs. any one field) |
+
+**Example:**
+```yaml
+---
+status: in-progress
+dueDate: 2025-03-15
+priority: high
+---
+
+# Implement User Authentication
+
+Task content and notes...
+```
+
+#### Strategy 2: Tag-based Recognition
+
+Files with specific tags are recognized as tasks.
+
+| Setting | Description |
+|---------|-------------|
+| **Task Tags** | Tags that indicate a file is a task (e.g., `#task`, `#todo`, `#actionable`) |
+| **Tag Matching Mode** | `exact`, `prefix`, or `contains` matching |
+
+**Matching modes:**
+| Mode | Tag `#task` matches |
+|------|---------------------|
+| **Exact** | Only `#task` |
+| **Prefix** | `#task`, `#task/urgent`, `#task-123` |
+| **Contains** | `#task`, `#my-task`, `#task-list` |
+
+#### Strategy 3: Path-based Recognition
+
+Files in specific folders are recognized as tasks.
+
+| Setting | Description |
+|---------|-------------|
+| **Task Paths** | Folder paths containing task files |
+| **Path Matching Mode** | `prefix`, `glob`, or `regex` matching |
+
+**Matching mode examples:**
+
+| Mode | Pattern | Matches |
+|------|---------|---------|
+| **Prefix** | `Projects/` | All files under `Projects/` folder |
+| **Glob** | `Projects/**/*.md` | All `.md` files in `Projects/` and subfolders |
+| **Regex** | `^Tasks/\d{4}` | Files in `Tasks/` starting with 4-digit year |
+
+### Metadata Mappings
+
+Map custom frontmatter fields to standard Task Genius properties:
+
+| Setting | Description |
+|---------|-------------|
+| **Source Key** | Your custom field name |
+| **Target Key** | Standard field (`status`, `project`, `dueDate`, etc.) |
+
+**Available target fields:**
+- `status`, `project`, `context`, `area`, `priority`, `tags`
+- `startDate`, `scheduledDate`, `dueDate`, `completedDate`, `createdDate`, `recurrence`
+
+### Task Title Source
+
+Configure what becomes the task title:
+
+| Option | Description |
+|--------|-------------|
+| **Filename** | Use the file's name as task title |
+| **Frontmatter title** | Use `title:` field from frontmatter |
+| **First H1 heading** | Use the first `# Heading` as title |
+| **Custom field** | Use a specified frontmatter field |
+
+**Additional options:**
+- **Strip file extension**: Remove `.md` from filename
+- **Prefer frontmatter title**: When editing, update frontmatter instead of renaming file
+
+### Status Mapping
+
+Map between human-readable metadata values and task checkbox symbols:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable status mapping** | Convert between metadata and symbols | Off |
+| **Case sensitive matching** | Match status values case-sensitively | Off |
+| **Auto-detect mappings** | Sync with Task Status Settings | Off |
+
+**Default mappings:**
+
+| Metadata Value | Task Symbol |
+|----------------|-------------|
+| `completed` | `x` |
+| `in-progress` | `/` |
+| `planned` | `?` |
+| `cancelled` | `-` |
+| `not-started` | ` ` (space) |
+
+---
+
+## Performance Configuration
+
+Optimize indexing for large vaults:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable worker processing** | Use background threads for parsing | On |
+
+<Callout type="tip">
+Worker processing is recommended for vaults with 1000+ files. It prevents UI freezing during initial indexing and large updates.
+</Callout>
+
+### How It Works
+
+The indexer uses a multi-tier performance system:
+
+1. **Snapshot Loading**: ~100ms startup for 1000+ tasks from cache
+2. **Incremental Updates**: Only changed files are reprocessed
+3. **Content Hashing**: Detect actual changes vs. metadata-only updates
+4. **Background Workers**: Parallel processing without blocking UI
+
+---
+
+## Index Maintenance
+
+### Force Rebuild
+
+If you notice missing or incorrect tasks, force a complete rebuild:
+
+Use the command palette: `Task Genius: Force reindex all tasks`
+
+<Callout type="warning">
+Rebuilding clears the cache and reprocesses all files. This may take a few seconds for large vaults.
+</Callout>
+
+### When to Rebuild
+
+Rebuild the index when:
+- Tasks appear missing after changing settings
+- Task metadata seems outdated
+- You've made bulk changes to files outside Obsidian
+- After upgrading Task Genius to a new version
+
+---
+
+## Architecture Overview
+
+<Mermaid chart={`
+graph TB
+    subgraph "Task Sources"
+        A[Markdown Files] --> B[Checkbox Tasks Parser]
+        C[File Metadata] --> D[File Tasks Parser]
+    end
+
+    subgraph "Indexer Core"
+        B --> E[Task Repository]
+        D --> E
+        E --> F[Cache Storage]
+        E --> G[Worker Pool]
+    end
+
+    subgraph "Consumers"
+        E --> H[Task View]
+        E --> I[Progress Bars]
+        E --> J[Filters]
+    end
+`} />
+
+### Data Flow
+
+1. **File Monitoring**: Detects file changes (create, modify, delete)
+2. **Smart Caching**: Checks cache validity using content hashing
+3. **Parallel Processing**: Distributes parsing to Web Workers
+4. **Event Broadcasting**: Triggers `task-genius:task-cache-updated` events
+5. **View Updates**: All views sync automatically via event subscription
+
+---
+
+## Troubleshooting
+
+### Tasks Not Being Indexed
+
+**Issue:** Some tasks don't appear in Task View.
+
+**Solutions:**
+1. Check if the file is excluded by [File Filter](/docs/file-filter)
+2. Verify heading filters aren't excluding the task's section
+3. Ensure the task format matches your metadata format setting
+4. Force rebuild the index
+
+### File Tasks Not Recognized
+
+**Issue:** Files aren't being treated as tasks.
+
+**Solutions:**
+1. Enable File Tasks in settings
+2. Configure at least one recognition strategy
+3. Verify the file has required metadata/tags/path
+4. Check strategy settings (e.g., require all fields vs. any)
+
+### Performance Issues
+
+**Issue:** Indexing is slow or freezes the UI.
+
+**Solutions:**
+1. Enable worker processing
+2. Use heading filters to limit scope
+3. Configure [File Filter](/docs/file-filter) to exclude unnecessary folders
+4. Consider splitting large files
+
+### Dates Not Parsing Correctly
+
+**Issue:** Dates appear wrong or aren't recognized.
+
+**Solutions:**
+1. Enable custom date formats
+2. Add your date pattern to the format list
+3. Use standard ISO format (`yyyy-MM-dd`) when possible
+4. Check daily note path configuration
+
+---
+
+## Related Features
+
+- [Projects](/docs/project): Organize tasks into projects
+- [File Filter](/docs/file-filter): Control which files are indexed
+- [Task Status](/docs/task-status): Configure checkbox symbols
+- [Time Parsing](/docs/time-parsing): Natural language date parsing

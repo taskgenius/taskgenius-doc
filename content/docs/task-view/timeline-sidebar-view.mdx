@@ -176,8 +176,32 @@ You can read more about view settings on the [Basic view settings](/docs/task-vi
 
 ### Specific Settings
 
-- **Enable Timeline Sidebar:** Control whether the timeline sidebar feature is enabled
-- **Auto Open on Startup:** Automatically open the timeline sidebar when the plugin starts
-- **Show Completed Tasks:** Control visibility of completed tasks in the timeline
-- **Focus Mode by Default:** Start the timeline in focus mode (showing only today's events)
-- **Max Events to Show:** Limit the maximum number of events displayed in the timeline
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `enableTimelineSidebar` | boolean | `false` | Control whether the timeline sidebar feature is enabled |
+| `autoOpenOnStartup` | boolean | `false` | Automatically open the timeline sidebar when the plugin starts |
+| `showCompletedTasks` | boolean | `true` | Control visibility of completed tasks in the timeline |
+| `focusModeByDefault` | boolean | `false` | Start the timeline in focus mode (showing only today's events) |
+| `maxEventsToShow` | number | `100` | Limit the maximum number of events displayed in the timeline |
+
+### Quick Input Settings
+
+<VersionCallout version="9.5.0" />
+
+Configure the behavior of the integrated quick input area:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `quickInputCollapsed` | boolean | `false` | Start the quick input area in collapsed state |
+| `quickInputDefaultHeight` | number | `150` | Default height of the quick input area in pixels |
+| `quickInputAnimationDuration` | number | `300` | Animation duration for collapse/expand in milliseconds |
+| `quickInputCollapseOnCapture` | boolean | `false` | Automatically collapse quick input after capturing a task |
+| `quickInputShowQuickActions` | boolean | `true` | Show quick action buttons in the quick input area |
+
+**Quick Input Features:**
+
+- **Collapsible Area:** The quick input can be collapsed to maximize timeline viewing space
+- **Adjustable Height:** Customize the default height to match your typing preferences
+- **Animation Control:** Adjust the smoothness of collapse/expand animations
+- **Auto-Collapse:** Optionally collapse after each capture for a cleaner interface
+- **Quick Actions:** Toggle visibility of action buttons for streamlined input

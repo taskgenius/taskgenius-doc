@@ -15,17 +15,39 @@ By default, all views (except the habit view) have the following settings:
 ### Basic Settings
 
 - **View Name**: The name displayed for the view (e.g., "Inbox").
-- **Icon**: The Lucide icon used for the view in the sidebar.
+- **Icon**: The Lucide icon used for the view in the sidebar. Click the icon button to open an icon picker.
+- **Sidebar Position**: Choose where this view appears in the sidebar:
+  - **Top Section**: Appears in the main navigation area
+  - **Bottom Section**: Visually separated from top section views (default for Calendar, Gantt, Kanban, Habit views)
 
 ### General Filters
 
 - **Hide Completed and Abandoned Tasks**: Toggle to hide tasks marked as completed (`x`) or abandoned (`-`).
 - **Filter Blanks**: Toggle to hide tasks with no content.
 
-### Sort Settings
+### Advanced Filtering
 
-- **Sort By**: Select the field to sort the tasks by.
-- **Sort Direction**: Select the direction to sort the tasks.
+<VersionCallout version="9.0.0" />
+
+Enable **Advanced Filtering** to use multi-group filtering with complex conditions. When enabled, you can:
+
+- Create multiple filter groups
+- Set conditions within each group (all/any match)
+- Combine groups with AND/OR logic
+- Build sophisticated filter queries for precise task selection
+
+### Sort Criteria
+
+<VersionCallout version="8.0.0" />
+
+Define multiple sort criteria applied sequentially. Each criterion includes:
+
+- **Sort Field**: Choose from Status, Priority, Due Date, Start Date, Scheduled Date, or Content
+- **Sort Direction**: 
+  - **Ascending**: For priority: High → Low → None. For dates: Earlier → Later → None
+  - **Descending**: For priority: None → Low → High. For dates: None → Later → Earlier
+
+Use the arrow buttons to reorder criteria priority, or the trash icon to remove a criterion.
 
 ### Filter Rules
 
@@ -33,11 +55,62 @@ Define specific criteria for tasks to be included in this view:
 
 - **Text Contains**: Filter by specific text within the task content.
 - **Tags Include**: Only show tasks that have _all_ specified tags (e.g., `#urgent, #work`).
-  - **Tags Exclude**: Hide tasks that have _any_ of the specified tags (e.g., `#waiting, #someday`).
-  - **Project Is**: Only show tasks belonging to a specific project path (exact match).
-  - **Priority Is**: Only show tasks with a specific priority level (e.g., `1`, `2`).
-  - **Status Include**: Only show tasks with specific status markers (e.g., `/`, `>`).
-  - **Status Exclude**: Hide tasks with specific status markers (e.g., `-`, `x`).
-  - **Due/Start/Scheduled Date Is**: Filter tasks based on their due, start, or scheduled dates. Accepts specific dates (`YYYY-MM-DD`) or relative terms (`today`, `next week`).
-  - **Path Includes**: Only show tasks whose file path contains the specified string (e.g., `Meetings/`).
-  - **Path Excludes**: Hide tasks whose file path contains the specified string (e.g., `Archive/`).
+- **Tags Exclude**: Hide tasks that have _any_ of the specified tags (e.g., `#waiting, #someday`).
+- **Project Is**: Only show tasks belonging to a specific project path (exact match).
+- **Priority Is**: Only show tasks with a specific priority level (e.g., `1`, `2`).
+- **Status Include**: Only show tasks with specific status markers (e.g., `/`, `>`).
+- **Status Exclude**: Hide tasks with specific status markers (e.g., `-`, `x`).
+- **Due/Start/Scheduled Date Is**: Filter tasks based on their due, start, or scheduled dates. Accepts specific dates (`YYYY-MM-DD`) or relative terms (`today`, `next week`).
+- **Path Includes**: Only show tasks whose file path contains the specified string (e.g., `Meetings/`).
+- **Path Excludes**: Hide tasks whose file path contains the specified string (e.g., `Archive/`).
+
+---
+
+## View-Specific Settings
+
+Different view types have additional configuration options:
+
+### Calendar View Settings
+
+- **First day of week**: Override the locale default for calendar display
+- **Hide weekends**: Hide Saturday and Sunday columns
+
+### Kanban View Settings
+
+- **Group by**: Select the task property for columns (Status, Priority, Tags, Project, Due Date, etc.)
+- **Show checkbox**: Display task completion checkbox on cards
+- **Hide empty columns**: Automatically hide columns with no tasks
+- **Default sort field**: How tasks are sorted within each column
+- **Default sort order**: Ascending or descending sort
+- **Custom Columns**: Define custom columns for non-status grouping
+- **Hidden Columns**: Manage which columns are visible
+
+### Forecast View Settings
+
+- **First day of week**: Override the locale default for forecast calendar
+- **Hide weekends**: Hide weekend columns in the forecast display
+
+### Quadrant View Settings
+
+- **Classification Method**: Choose between tag-based or priority-based classification
+- **Tag-based settings**:
+  - Urgent Tag: Tag to identify urgent tasks (e.g., `#urgent`)
+  - Important Tag: Tag for important tasks (e.g., `#important`)
+  - Urgent Threshold Days: Tasks due within N days are urgent
+- **Priority-based settings**:
+  - Urgent Priority Threshold: Priority level for urgent tasks (1-5)
+  - Important Priority Threshold: Priority level for important tasks (1-5)
+- **Auto Update Priority**: Update task priority when moved between quadrants
+- **Auto Update Tags**: Add/remove urgent/important tags when moved
+- **Hide Empty Quadrants**: Hide quadrants with no tasks
+
+### Two Column View Settings
+
+<VersionCallout version="9.0.0" />
+
+- **View type**: Switch between Standard and Two Column layout
+- **Group by task property**: Select property for left column grouping (Tags, Project, Priority, Context, Status, Dates, File Path)
+- **Left column title**: Title for the items list
+- **Right column title**: Default title for the tasks list
+- **Multi-select Text**: Text shown when multiple items are selected
+- **Empty state text**: Text shown when no items are selected

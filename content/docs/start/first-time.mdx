@@ -1,0 +1,96 @@
+---
+title: First Time Using Task Genius
+description: "A concrete first session: install, open the Task View, capture tasks, and configure just enough to be productive"
+---
+
+import { VersionCallout } from "@/components/VersionCallout";
+import { DownloadIcon, LayoutDashboardIcon, CheckCircle2Icon, SettingsIcon, ListTodoIcon, InboxIcon } from "lucide-react";
+
+This guide is designed for your first real session. The goal is not to learn everything - it's to get to a usable loop quickly.
+
+## <DownloadIcon className="inline-block" /> Install and enable
+
+- Install Task Genius (pick one):
+  - [Community Installation](/docs/installation/community)
+  - [Manual Installation](/docs/installation/manual)
+- Confirm the plugin is enabled in Obsidian.
+
+## <LayoutDashboardIcon className="inline-block" /> Open the Task View (the dashboard)
+
+Open it using either method:
+
+- Run command: `Task Genius: Open Task Genius view`
+- (Optional) Enable the Ribbon Icon in view settings, then click it
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=view-settings">
+  Open View Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+## <ListTodoIcon className="inline-block" /> Create 5-10 tasks (so the UI becomes real)
+
+Put tasks anywhere in your vault. Plain Markdown is enough:
+
+```markdown
+- [ ] Write meeting notes
+- [ ] Plan next week #project/work
+  - [ ] Draft outline
+  - [ ] Send for review
+```
+
+## <InboxIcon className="inline-block" /> Learn the minimum loop: capture -> inbox -> act
+
+1. Capture tasks in notes as you work.
+2. Use the Task View's Inbox to see what's unprocessed.
+3. Add metadata gradually (dates / projects / status) as needed.
+
+Docs to keep open:
+
+- [Task View](/docs/task-view)
+- [View Modes](/docs/view-modes)
+
+## <SettingsIcon className="inline-block" /> Configure only the essentials (10-minute version)
+
+### A) Status marks and cycling (recommended)
+
+If you want more than `- [ ]` and `- [x]`, configure statuses and cycling rules:
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=task-status">
+  Open Task Status Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+Related: [Task Status & Cycling](/docs/task-status)
+
+### B) Dates and priority (when you start planning)
+
+<DeepLinkButton href="obsidian://task-genius/settings?tab=date-priority">
+  Open Date & Priority Settings
+</DeepLinkButton>
+<DeepLinkFallback />
+
+Related: [Date & Priority Management](/docs/date-priority)
+
+### C) Indexing (built-in and required)
+
+Task Genius relies on indexing as a core capability - it is **always enabled** in current versions (there is no on/off switch).
+
+What you still need to know:
+
+- Indexing keeps views fast and consistent across the whole vault
+- If results look stale, reopen the Task View or run `Task Genius: Force reindex all tasks`
+- Advanced tuning and troubleshooting lives in: [Task Indexing](/docs/task-view/indexer)
+
+## <CheckCircle2Icon className="inline-block" /> \"Done\" checklist
+
+You're successfully onboarded when:
+
+- You can open the Task View reliably
+- Inbox shows tasks you created
+- You can switch View Modes and search/filter
+- You configured statuses (optional) and dates (optional) without breaking your flow
+
+## Next
+
+- If you're already getting value and want to tune the UI: [Already using, want to learn more](/docs/start/already-using)
+- If you want a complete workflow system: [Deep task-management playbook](/docs/start/task-management)

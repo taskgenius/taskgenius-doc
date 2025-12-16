@@ -1,0 +1,12 @@
+{
+  "title": "Start Here",
+  "description": "Three guided tracks: first time, already using, and deep task-management playbook",
+  "icon": "Route",
+  "root": false,
+  "pages": [
+    "index",
+    "first-time",
+    "already-using",
+    "task-management"
+  ]
+}
